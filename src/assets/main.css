@@ -23,7 +23,9 @@ body {
   --text-color-primary: #1a1a1a;
   --text-color-secondary: #666;
   --background-color: #FFFFFF;
-  --header-bg: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
+  --header-bg: rgba(255, 255, 255, 0.8);
+  --card-bg: #FFFFFF;
+  --border-color: #e0e0e0; /* Semi-transparent white */
 }
 
 /* 👇 ADD THIS SECTION 👇 */
@@ -31,7 +33,9 @@ body {
   --text-color-primary: #f0f0f0;
   --text-color-secondary: #aaa;
   --background-color: #121212;
-  --header-bg: rgba(28, 28, 28, 0.8); /* Semi-transparent dark */
+  --header-bg: rgba(28, 28, 28, 0.8);
+  --card-bg: #1c1c1c;
+  --border-color: #333333; /* Semi-transparent dark */
 }
 /* 👆 END OF ADDITION 👆 */
 
