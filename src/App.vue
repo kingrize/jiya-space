@@ -1,6 +1,5 @@
 <!-- File: src/App.vue -->
-<!-- Ini adalah komponen induk yang membungkus seluruh aplikasi. -->
-<!-- Header, Footer, dan konten halaman utama ditampilkan di sini. -->
+<!-- Sedikit penyesuaian pada padding 'main' untuk memberi ruang bagi header sticky. -->
 <script setup>
 import AppHeader from './components/layout/Header.vue';
 import AppFooter from './components/layout/Footer.vue';
@@ -10,8 +9,6 @@ import AppFooter from './components/layout/Footer.vue';
   <app-header />
 
   <main>
-    <!-- router-view adalah tempat komponen halaman (misal: HomeView) akan dirender. -->
-    <!-- Tag <transition> memberikan efek fade saat berpindah halaman. -->
     <router-view v-slot="{ Component }">
       <transition name="fade" mode="out-in">
         <component :is="Component" />
@@ -24,10 +21,12 @@ import AppFooter from './components/layout/Footer.vue';
 
 <style>
 main {
+  /* Padding atas dikurangi karena header sudah tidak mendorong konten secara fisik. */
+  /* Kita hanya perlu padding untuk spasi visual awal. */
   padding: 2rem;
-  max-width: 960px; /* Membatasi lebar konten agar mudah dibaca */
-  margin: 0 auto; /* Memposisikan konten di tengah */
-  min-height: calc(100vh - 150px); /* Mendorong footer ke bawah */
+  max-width: 960px;
+  margin: 0 auto;
+  min-height: calc(100vh - 150px);
 }
 
 /* Style untuk transisi antar halaman */
