@@ -1,11 +1,19 @@
 import { createApp } from 'vue';
 import App from './App.vue';
-import router from './router'; // <-- Impor router kita
+import router from './router';
 
-import './assets/main.css'; // <-- Kita akan buat file ini
+// 👇 START: Icon Library Setup
+import { OhVueIcon, addIcons } from "oh-vue-icons";
+import { FaSun, FaMoon } from "oh-vue-icons/icons/fa";
+
+addIcons(FaSun, FaMoon);
+// 👆 END: Icon Library Setup
+
+import './assets/main.css';
 
 const app = createApp(App);
 
-app.use(router); // <-- Gunakan router di aplikasi
+app.use(router);
+app.component("v-icon", OhVueIcon); // <-- Daftarkan komponen ikon secara global
 
 app.mount('#app');

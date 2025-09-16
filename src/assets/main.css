@@ -17,3 +17,26 @@ body {
   color: var(--text-color);
   transition: background-color 0.3s, color 0.3s;
 }
+
+:root {
+  --accent-color: #007AFF;
+  --text-color-primary: #1a1a1a;
+  --text-color-secondary: #666;
+  --background-color: #FFFFFF;
+  --header-bg: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
+}
+
+/* 👇 ADD THIS SECTION 👇 */
+:root.dark {
+  --text-color-primary: #f0f0f0;
+  --text-color-secondary: #aaa;
+  --background-color: #121212;
+  --header-bg: rgba(28, 28, 28, 0.8); /* Semi-transparent dark */
+}
+/* 👆 END OF ADDITION 👆 */
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color-primary);
+  transition: background-color 0.3s, color 0.3s;
+}

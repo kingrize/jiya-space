@@ -1,15 +1,19 @@
 <script setup>
-// Logic untuk header nanti di sini
+import Avatar from '../ui/Avatar.vue';
+import ThemeToggle from '../ui/ThemeToggle.vue';
 </script>
 
 <template>
-  <div class="header-container">
-    <div class="logo">
-      <span>Jiya.space</span>
+  <header class="header-container">
+    <div class="profile-section">
+      <Avatar />
+      <div class="status-container">
+        <span class="name">Jiya</span>
+        <span class="status">Currently building...</span>
+      </div>
     </div>
-    <nav class="navigation">
-      </nav>
-  </div>
+    <ThemeToggle />
+  </header>
 </template>
 
 <style scoped>
@@ -18,9 +22,28 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
-  background-color: #f8f8f8; /* Warna sementara */
+  max-width: 960px;
+  margin: 0 auto;
 }
-.logo span {
-  font-weight: bold;
+
+.profile-section {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem; /* Creates space between avatar and status */
+}
+
+.status-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.name {
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.status {
+  font-size: 0.85rem;
+  color: #666;
 }
 </style>
