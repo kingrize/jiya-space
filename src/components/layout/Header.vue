@@ -1,3 +1,5 @@
+<!-- File: src/components/layout/Header.vue -->
+<!-- Komponen khusus untuk bagian header/navbar. -->
 <script setup>
 import Avatar from '../ui/Avatar.vue';
 import ThemeToggle from '../ui/ThemeToggle.vue';
@@ -29,7 +31,7 @@ import ThemeToggle from '../ui/ThemeToggle.vue';
 .profile-section {
   display: flex;
   align-items: center;
-  gap: 0.75rem; /* Creates space between avatar and status */
+  gap: 0.75rem;
 }
 
 .status-container {
@@ -40,10 +42,12 @@ import ThemeToggle from '../ui/ThemeToggle.vue';
 .name {
   font-weight: 600;
   font-size: 1.1rem;
+  color: var(--text-color-primary);
 }
 
 .status {
   font-size: 0.85rem;
-  color: #666;
+  color: var(--text-color-secondary);
 }
 </style>
+

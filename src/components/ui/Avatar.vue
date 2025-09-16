@@ -1,6 +1,8 @@
+<!-- File: src/components/ui/Avatar.vue -->
+<!-- Komponen kecil yang dapat dipakai ulang hanya untuk menampilkan avatar. -->
 <script setup>
-// In the future, we can make the image URL a prop
-const avatarUrl = 'https://i.pravatar.cc/40'; // A cool placeholder avatar service
+// Menggunakan layanan placeholder untuk avatar sementara.
+const avatarUrl = 'https://i.pravatar.cc/40';
 </script>
 
 <template>
@@ -11,8 +13,9 @@ const avatarUrl = 'https://i.pravatar.cc/40'; // A cool placeholder avatar servi
 .avatar-image {
   width: 40px;
   height: 40px;
-  border-radius: 50%; /* Makes it a circle */
-  object-fit: cover; /* Ensures the image covers the area without distortion */
-  border: 2px solid #ddd;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--border-color);
 }
 </style>
+

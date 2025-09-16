@@ -1,33 +1,34 @@
+<!-- File: src/views/HomeView.vue -->
+<!-- Ini adalah komponen untuk halaman utama (homepage). -->
 <script setup>
 import ContentCard from '../components/ui/ContentCard.vue';
 </script>
 
 <template>
   <div class="home-view">
-    <!-- Hero Section -->
+    <!-- Bagian Hero -->
     <section class="hero-section">
-      <h1 class="hero-title">A Creative Mind's Digital Playground.</h1>
-      <p class="hero-subtitle">
+      <h1 class="hero-title fade-in-up">A Creative Mind's Digital Playground.</h1>
+      <p class="hero-subtitle fade-in-up" style="animation-delay: 0.2s;">
         Curated thoughts, favorite melodies, and snapshots of inspiration. Welcome to my personal realm.
       </p>
-      <button class="hero-cta">Explore More</button>
+      <button class="hero-cta fade-in-up" style="animation-delay: 0.4s;">Explore More</button>
     </section>
 
-    <!-- Content Grid -->
+    <!-- Grid untuk menampilkan kartu konten -->
     <section class="content-grid">
-      <ContentCard title="Favorite Quote">
+      <ContentCard title="Favorite Quote" class="fade-in-up" style="animation-delay: 0.6s;">
         <blockquote>
           "The public is more familiar with bad design than good design. It is, in effect, conditioned to prefer bad design, because that is what it lives with."
           <cite>- Paul Rand</cite>
         </blockquote>
       </ContentCard>
 
-      <ContentCard title="Now Playing">
+      <ContentCard title="Now Playing" class="fade-in-up" style="animation-delay: 0.7s;">
         <p>Currently vibing to some chill lofi beats while coding.</p>
-        <!-- Nanti kita bisa taruh widget Spotify di sini -->
       </ContentCard>
       
-      <ContentCard title="Current Tech Stack">
+      <ContentCard title="Current Tech Stack" class="fade-in-up" style="animation-delay: 0.8s;">
          <p>Building this space with Vue.js, Vite, and a lot of coffee.</p>
       </ContentCard>
     </section>
@@ -35,6 +36,7 @@ import ContentCard from '../components/ui/ContentCard.vue';
 </template>
 
 <style scoped>
+/* Scoped style hanya berlaku untuk komponen ini. */
 .hero-section {
   text-align: center;
   padding: 4rem 1rem;
@@ -79,7 +81,6 @@ import ContentCard from '../components/ui/ContentCard.vue';
   margin-top: 2rem;
 }
 
-/* Styling untuk quote */
 blockquote {
   font-style: italic;
   color: var(--text-color-secondary);
@@ -93,3 +94,4 @@ cite {
   color: var(--text-color-primary);
 }
 </style>
+
