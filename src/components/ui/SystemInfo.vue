@@ -1,5 +1,5 @@
 <!-- File: src/components/ui/SystemInfo.vue -->
-<!-- (FILE BARU) Widget "neofetch" untuk menampilkan info sistem. -->
+<!-- (DIPERBARUI) Mengganti ASCII art dengan logo kucing kustom. -->
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
 import { useDark } from '@vueuse/core';
@@ -39,12 +39,12 @@ onUnmounted(() => {
     <div class="window-header">jiya@space:~$ neofetch</div>
     <div class="window-body">
       <div class="ascii-art">
+        <!-- PERUBAHAN: ASCII art kucing baru Anda ditempatkan di sini. -->
         <pre>
-    .-.
-   (o o)
-   | O \
-    \   \
-    `~~~'
+  ／l、
+（ﾟ､ ｡ ７
+  l、ﾞ ~ヽ
+  じしf_, )ノ
         </pre>
       </div>
       <div class="info-lines">
@@ -89,8 +89,8 @@ onUnmounted(() => {
 }
 .ascii-art pre {
   color: var(--accent-color);
-  font-size: 1.5rem;
-  line-height: 1.1;
+  font-size: 1.2rem; /* Disesuaikan agar pas */
+  line-height: 1.4;
   font-family: monospace;
 }
 .info-lines {
@@ -103,4 +103,16 @@ onUnmounted(() => {
   width: 80px;
   display: inline-block;
 }
+
+@media (max-width: 480px) {
+  .window-body {
+    flex-direction: column;
+    text-align: center;
+  }
+  .info-lines .label {
+    width: auto;
+    margin-right: 0.5rem;
+  }
+}
 </style>
+
