@@ -1,5 +1,5 @@
 <!-- File: src/components/layout/Header.vue -->
-<!-- (DIPERBARUI) Mengintegrasikan logika Now Playing dan status acak. -->
+<!-- (DIPERBARUI) Menambahkan kembali logika deteksi scroll untuk efek blur. -->
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
 import Avatar from '../ui/Avatar.vue';
@@ -10,12 +10,18 @@ import MobileNav from './MobileNav.vue';
 // State untuk menu mobile
 const isMobileMenuOpen = ref(false);
 
+// State untuk efek scroll di header
+const scrolled = ref(false);
+
+const handleScroll = () => {
+  scrolled.value = window.scrollY > 10;
+};
+
 // State untuk data Spotify dan status
 const song = ref(null);
 const status = ref('Loading status...');
 let intervalId = null;
 
-// Daftar status acak jika tidak ada musik yang diputar
 const randomStatuses = [
   'Crafting new ideas.',
   'Exploring the web.',
@@ -24,7 +30,6 @@ const randomStatuses = [
   'Thinking about design.',
 ];
 
-// Fungsi untuk mengambil data dari serverless function kita
 const fetchNowPlaying = async () => {
   try {
     const response = await fetch('/.netlify/functions/get-spotify-now-playing');
@@ -33,7 +38,6 @@ const fetchNowPlaying = async () => {
     const data = await response.json();
     song.value = data;
 
-    // Jika tidak ada lagu yang diputar, pilih status acak
     if (!data.isPlaying) {
       status.value = randomStatuses[Math.floor(Math.random() * randomStatuses.length)];
     }
@@ -44,14 +48,17 @@ const fetchNowPlaying = async () => {
   }
 };
 
-// Panggil fungsi saat komponen dimuat dan set interval untuk refresh
 onMounted(() => {
+  // Tambahkan event listener untuk scroll
+  window.addEventListener('scroll', handleScroll);
+  // Panggil API Spotify
   fetchNowPlaying();
-  intervalId = setInterval(fetchNowPlaying, 30000); // Refresh setiap 30 detik
+  intervalId = setInterval(fetchNowPlaying, 30000);
 });
 
-// Hentikan interval saat komponen dihancurkan untuk mencegah memory leak
 onUnmounted(() => {
+  // Hapus event listener untuk mencegah memory leak
+  window.removeEventListener('scroll', handleScroll);
   if (intervalId) {
     clearInterval(intervalId);
   }
@@ -59,13 +66,12 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <header class="header-container">
+  <header class="header-container" :class="{ scrolled: scrolled }">
     <div class="header-content">
       <div class="profile-section">
         <Avatar />
         <div class="status-container">
           <span class="name">Jiya</span>
-          <!-- Tampilan status dinamis -->
           <div class="status">
             <template v-if="song && song.isPlaying">
               <span>🎵 {{ song.title }} - {{ song.artist }}</span>
@@ -77,7 +83,6 @@ onUnmounted(() => {
         </div>
       </div>
 
-      <!-- Navigasi Desktop -->
       <nav class="desktop-nav">
         <router-link to="/">Home</router-link>
         <router-link to="/projects">Projects</router-link>
@@ -85,13 +90,11 @@ onUnmounted(() => {
         <ThemeToggle />
       </nav>
 
-      <!-- Tombol untuk Navigasi Mobile -->
       <div class="mobile-nav-toggle">
         <HamburgerButton :is-open="isMobileMenuOpen" @toggle="isMobileMenuOpen = !isMobileMenuOpen" />
       </div>
     </div>
 
-    <!-- Panel Navigasi Mobile -->
     <MobileNav :is-open="isMobileMenuOpen" @close="isMobileMenuOpen = false" />
   </header>
 </template>

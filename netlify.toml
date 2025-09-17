@@ -1,2 +1,11 @@
-[functions]
-  directory = "netlify/functions/"
+# File: netlify.toml
+# (FILE BARU) Mengatasi masalah "Page Not Found" saat refresh.
+# Peraturan ini memberitahu Netlify: "Untuk setiap permintaan halaman
+# yang tidak cocok dengan file yang ada, kirim saja file index.html
+# dan biarkan Vue Router yang menanganinya."
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
