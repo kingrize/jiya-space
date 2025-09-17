@@ -1,5 +1,5 @@
 /* File: src/assets/main.css */
-/* Menambahkan variabel baru untuk background header yang semi-transparan. */
+/* File ini berisi semua style global, variabel warna, dan animasi dasar. */
 
 /* Variabel CSS untuk Light Mode */
 :root {
@@ -9,7 +9,7 @@
   --background-color: #f8f9fa;
   --card-bg: #FFFFFF;
   --border-color: #e5e7eb;
-  --header-bg: rgba(248, 249, 250, 0.8); /* Latar belakang header semi-transparan */
+  --header-bg: rgba(248, 249, 250, 0.8);
 }
 
 /* Variabel CSS untuk Dark Mode */
@@ -20,7 +20,7 @@
   --background-color: #111827;
   --card-bg: #1f2937;
   --border-color: #374151;
-  --header-bg: rgba(17, 24, 39, 0.8); /* Latar belakang header semi-transparan (gelap) */
+  --header-bg: rgba(17, 24, 39, 0.8);
 }
 
 /* Reset dan Style Dasar */
@@ -52,5 +52,16 @@ body {
 
 .fade-in-up {
   animation: fadeInUp 0.5s ease-out forwards;
+}
+
+/* Style untuk tag teknologi di kartu proyek */
+.tech-tag {
+  background-color: var(--accent-color);
+  color: white;
+  padding: 0.25rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  opacity: 0.8;
 }
 

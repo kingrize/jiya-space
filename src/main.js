@@ -6,14 +6,14 @@ import App from './App.vue';
 import router from './router';
 
 // Setup Pustaka Ikon (oh-vue-icons)
-// Kita mengimpor ikon yang dibutuhkan dan mendaftarkannya secara global.
 import { OhVueIcon, addIcons } from "oh-vue-icons";
 import { FaSun, FaMoon } from "oh-vue-icons/icons/fa";
+import { CoGithub, HiExternalLink } from "oh-vue-icons/icons";
 
-addIcons(FaSun, FaMoon);
+// Daftarkan semua ikon yang kita butuhkan secara global.
+addIcons(FaSun, FaMoon, CoGithub, HiExternalLink);
 
 // Impor Style Global
-// File CSS ini akan berlaku untuk seluruh halaman.
 import './assets/main.css';
 
 // Buat instance aplikasi Vue.

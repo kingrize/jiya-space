@@ -4,20 +4,30 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from '../views/HomeView.vue';
 
-// Array yang berisi daftar semua rute.
 const routes = [
   {
-    path: '/', // URL di browser
-    name: 'home', // Nama rute
-    component: HomeView // Komponen Vue yang akan ditampilkan
+    path: '/',
+    name: 'home',
+    component: HomeView
   },
-  // Halaman baru di masa depan bisa ditambahkan di sini.
+  {
+    path: '/projects',
+    name: 'projects',
+    component: () => import('../views/ProjectsView.vue')
+  },
+  {
+    path: '/about',
+    name: 'about',
+    component: () => import('../views/AboutView.vue')
+  }
 ];
 
-// Buat instance router.
 const router = createRouter({
-  history: createWebHistory(), // Menggunakan mode history HTML5 untuk URL yang bersih.
-  routes
+  history: createWebHistory(),
+  routes,
+  scrollBehavior(to, from, savedPosition) {
+    return { top: 0 }
+  },
 });
 
 export default router;

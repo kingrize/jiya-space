@@ -1,5 +1,5 @@
 <!-- File: src/App.vue -->
-<!-- Sedikit penyesuaian pada padding 'main' untuk memberi ruang bagi header sticky. -->
+<!-- Ini adalah komponen induk yang membungkus seluruh aplikasi. -->
 <script setup>
 import AppHeader from './components/layout/Header.vue';
 import AppFooter from './components/layout/Footer.vue';
@@ -21,8 +21,6 @@ import AppFooter from './components/layout/Footer.vue';
 
 <style>
 main {
-  /* Padding atas dikurangi karena header sudah tidak mendorong konten secara fisik. */
-  /* Kita hanya perlu padding untuk spasi visual awal. */
   padding: 2rem;
   max-width: 960px;
   margin: 0 auto;

@@ -1,7 +1,6 @@
 <!-- File: src/components/ui/Avatar.vue -->
 <!-- Komponen kecil yang dapat dipakai ulang hanya untuk menampilkan avatar. -->
 <script setup>
-// Menggunakan layanan placeholder untuk avatar sementara.
 const avatarUrl = 'https://i.pravatar.cc/40';
 </script>
 

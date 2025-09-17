@@ -1,7 +1,6 @@
 <!-- File: src/components/layout/Footer.vue -->
 <!-- Komponen khusus untuk bagian footer. -->
 <script setup>
-// Mendapatkan tahun saat ini secara dinamis untuk copyright.
 const currentYear = new Date().getFullYear();
 </script>
 
