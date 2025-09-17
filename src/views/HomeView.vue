@@ -25,7 +25,7 @@ import ContentCard from '../components/ui/ContentCard.vue';
       </ContentCard>
       
       <ContentCard title="Math" class="fade-in-up" style="animation-delay: 1s;">
-         <p>Math nya A-nya Apalah.</p>
+         <p>Math A-nya Apalah.</p>
       </ContentCard>
     </section>
   </div>
