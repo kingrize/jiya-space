@@ -24,7 +24,7 @@ import ContentCard from '../components/ui/ContentCard.vue';
         </blockquote>
       </ContentCard>
       
-      <ContentCard title="Current Tech Stack" class="fade-in-up" style="animation-delay: 1s;">
+      <ContentCard title="Math" class="fade-in-up" style="animation-delay: 1s;">
          <p>Math nya A-nya Apalah.</p>
       </ContentCard>
     </section>
