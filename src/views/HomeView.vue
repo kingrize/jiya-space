@@ -1,7 +1,8 @@
 <!-- File: src/views/HomeView.vue -->
-<!-- (DIPERBARUI) Dibersihkan, tidak lagi menampilkan komponen NowPlaying. -->
+<!-- (DIPERBARUI) Menghapus card "Now Playing" dari halaman utama. -->
 <script setup>
 import ContentCard from '../components/ui/ContentCard.vue';
+// Komponen NowPlaying tidak lagi dibutuhkan di sini
 </script>
 
 <template>
@@ -17,15 +18,17 @@ import ContentCard from '../components/ui/ContentCard.vue';
 
     <!-- Content Grid -->
     <section class="content-grid">
-      <ContentCard title="Favorite Quote" class="fade-in-up" style="animation-delay: 0.8s;">
+      <ContentCard title="Favorite Quote" class="fade-in-up" style="animation-delay: 0.6s;">
         <blockquote>
           "The public is more familiar with bad design than good design. It is, in effect, conditioned to prefer bad design, because that is what it lives with."
           <cite>- Paul Rand</cite>
         </blockquote>
       </ContentCard>
+
+      <!-- KARTU "NOW PLAYING" DIHAPUS DARI SINI -->
       
-      <ContentCard title="Math" class="fade-in-up" style="animation-delay: 1s;">
-         <p>Math A-nya Apalah.</p>
+      <ContentCard title="Current Tech Stack" class="fade-in-up" style="animation-delay: 0.8s;">
+         <p>Building this space with Vue.js, Vite, and a lot of coffee.</p>
       </ContentCard>
     </section>
   </div>
@@ -90,4 +93,3 @@ cite {
   color: var(--text-color-primary);
 }
 </style>
-
