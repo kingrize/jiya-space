@@ -28,13 +28,13 @@ onMounted(() => {
     
     <!-- Tampilkan skeleton loader saat loading -->
     <div v-if="loading" class="projects-grid">
-      <ProjectCardSkeleton v-for="n in 3" :key="n" />
+      <ProjectCardSkeleton v-for="n in 3" :key="`skeleton-${n}`" />
     </div>
 
     <!-- Tampilkan data proyek setelah selesai dimuat -->
     <div v-else class="projects-grid">
       <ProjectCard 
-        v-for="project in projectData" 
+        v-for="(project, index) in projectData" 
         :key="project.id"
         :title="project.title"
         :description="project.description"
@@ -42,6 +42,7 @@ onMounted(() => {
         :github-url="project.githubUrl"
         :live-url="project.liveUrl"
         v-animate-on-scroll
+        :style="{ '--delay': `${index * 0.1}s` }"
       />
     </div>
   </div>
@@ -66,6 +67,11 @@ onMounted(() => {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 1.5rem;
+}
+
+/* Staggered animation delay for project cards */
+.projects-grid > * {
+  transition-delay: var(--delay, 0s);
 }
 </style>
 
