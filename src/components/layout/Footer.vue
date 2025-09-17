@@ -1,5 +1,5 @@
 <!-- File: src/components/layout/Footer.vue -->
-<!-- (DIPERBARUI) Dikembalikan ke versi sebelum integrasi widget. -->
+<!-- (DIPERBARUI) Dikembalikan ke versi sederhana. -->
 <script setup>
 import { computed } from 'vue';
 

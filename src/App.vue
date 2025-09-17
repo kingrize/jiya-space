@@ -1,62 +1,54 @@
-// File: src/App.vue
-// (DIPERBARUI) Menggunakan useHead untuk mengatur judul dan meta tag secara dinamis.
-
+<!-- File: src/App.vue -->
+<!-- (DIPERBARUI) Menambahkan komponen NowPlaying secara global untuk efek floating. -->
 <script setup>
 import { computed } from 'vue';
-import { useRoute } from 'vue-router';
 import { useHead } from '@vueuse/head';
-
+import { useRoute } from 'vue-router';
 import AppHeader from './components/layout/Header.vue';
 import AppFooter from './components/layout/Footer.vue';
+import NowPlaying from './components/ui/NowPlaying.vue'; // <-- Impor NowPlaying
 
 const route = useRoute();
-const siteTitle = 'Jiya.space';
 
-// Membuat judul halaman menjadi dinamis
-const pageTitle = computed(() => {
-  return route.meta.title ? `${route.meta.title} | ${siteTitle}` : siteTitle;
-});
-
-// Membuat deskripsi meta menjadi dinamis
-const pageDescription = computed(() => {
-  return route.meta.description || 'A personal space on the web.';
-});
-
-// Menggunakan useHead untuk menerapkan perubahan ke <head> dokumen
-useHead({
-  title: pageTitle,
+// Menggunakan data meta dari router untuk judul dinamis
+useHead(computed(() => ({
+  title: route.meta.title || 'Jiya.space',
   meta: [
-    {
-      name: 'description',
-      content: pageDescription,
-    },
+    { name: 'description', content: route.meta.description || 'Personal space for Jiya' },
   ],
-});
+})));
 </script>
 
 <template>
-  <div class="site-wrapper">
-    <AppHeader />
+  <div class="app-wrapper">
+    <app-header />
+
     <main>
       <router-view />
     </main>
-    <AppFooter />
+
+    <app-footer />
+
+    <!-- Komponen NowPlaying ditempatkan di sini, di luar alur utama -->
+    <NowPlaying />
   </div>
 </template>
 
-<style scoped>
-.site-wrapper {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+<style>
+/* Reset CSS dasar untuk konsistensi */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 main {
-  flex-grow: 1;
   padding: 2rem;
   max-width: 960px;
-  width: 100%;
   margin: 0 auto;
+  min-height: calc(100vh - 150px);
+  /* Menambahkan ruang di bawah agar tidak tertutup oleh floating bar */
+  padding-bottom: 120px; 
 }
 </style>
 
