@@ -1,7 +1,7 @@
 <!-- File: src/components/ui/Avatar.vue -->
-<!-- (DIPERBARUI) Menggunakan path relatif sebagai alternatif. -->
+<!-- (DIPERBAIKI) Dikembalikan ke kode aslinya yang benar. -->
 <script setup>
-// Ganti path '@' dengan path relatif.
+// Menggunakan path relatif yang sudah terbukti berfungsi
 import avatarUrl from '../../assets/images/avatar.jpg';
 </script>
 
@@ -15,7 +15,7 @@ import avatarUrl from '../../assets/images/avatar.jpg';
   height: 40px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid var(--border-color);
+  border: 2px solid rgba(var(--border-color-rgb), 0.5);
 }
 </style>
 

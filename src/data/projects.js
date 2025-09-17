@@ -1,13 +1,14 @@
 // File: src/data/projects.js
-// PASTIKAN Anda menggunakan "export const", bukan "export default".
+// (FILE BARU) Database untuk semua data proyek.
+
 export const projects = [
   {
     id: 1,
-    title: 'Personal Portfolio',
-    description: 'The very space you are browsing now. Built with Vue.js and Vite, focusing on a clean, responsive, and minimalist design.',
-    tags: ['Vue.js', 'Vite', 'JavaScript'],
+    title: 'Personal Portfolio - JiyaOS',
+    description: 'The very space you are browsing now. Built with Vue.js and Vite, focusing on a hybrid "macOS meets Linux" aesthetic with frosted glass UI, dynamic content, and serverless functions.',
+    tags: ['Vue.js', 'Vite', 'Netlify Functions', 'UI/UX'],
     githubUrl: 'https://github.com/kingrize/jiya-space',
-    liveUrl: '#'
+    liveUrl: 'https://jiyahome.netlify.app/',
   },
   {
     id: 2,

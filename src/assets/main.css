@@ -71,7 +71,6 @@ body::after {
 
 
 /* -- Utility Classes & Animations -- */
-/* ... (sisa kode tidak berubah) ... */
 .tech-tag {
   display: inline-block;
   background-color: var(--accent-color);
@@ -94,5 +93,6 @@ body::after {
 ::-webkit-scrollbar { width: 10px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background-color: rgba(var(--border-color-rgb), 0.5); border-radius: 10px; border: 2px solid rgba(0,0,0,0); background-clip: padding-box; }
-::-webkit-scrollbar-thumb:hover { background-color: rgba(var(--text-color-secondary-rgb, 156, 163, 175), 0.8); }
+::-webkit-scrollbar-thumb:hover { background-color: rgba(156, 163, 175, 0.8); } /* Hardcoded fallback for text-color-secondary-rgb */
+:root.dark ::-webkit-scrollbar-thumb:hover { background-color: rgba(156, 163, 175, 0.8); }
 

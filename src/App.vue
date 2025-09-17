@@ -1,16 +1,33 @@
 <!-- File: src/App.vue -->
-<!-- (DIPERBARUI) Semua logika Vanta.js dihapus untuk menyederhanakan komponen. -->
+<!-- (KONFIRMASI) Ini adalah kode yang benar untuk App.vue. -->
 <script setup>
-import { computed } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useHead } from '@vueuse/head';
 import { useRoute } from 'vue-router';
 import AppHeader from './components/layout/Header.vue';
 import AppFooter from './components/layout/Footer.vue';
+import CommandPalette from './components/ui/CommandPalette.vue';
 
 const route = useRoute();
+const isCommandPaletteOpen = ref(false);
+
+const handleGlobalKeydown = (event) => {
+  if ((event.metaKey || event.ctrlKey) && event.key === 'k') {
+    event.preventDefault();
+    isCommandPaletteOpen.value = !isCommandPaletteOpen.value;
+  }
+};
+
+onMounted(() => {
+  window.addEventListener('keydown', handleGlobalKeydown);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', handleGlobalKeydown);
+});
 
 useHead(computed(() => ({
-  title: route.meta.title || 'Jiya.space',
+  title: route.meta.title || 'JiyaOS',
   meta: [
     { name: 'description', content: route.meta.description || 'Personal space for Jiya' },
   ],
@@ -18,7 +35,6 @@ useHead(computed(() => ({
 </script>
 
 <template>
-  <!-- Tidak ada lagi elemen latar belakang terpisah -->
   <div class="app-wrapper">
     <app-header />
     <main>
@@ -29,26 +45,26 @@ useHead(computed(() => ({
       </router-view>
     </main>
     <app-footer />
+    
+    <CommandPalette :is-open="isCommandPaletteOpen" @close="isCommandPaletteOpen = false" />
   </div>
 </template>
 
 <style>
-/* Reset CSS dasar untuk konsistensi */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
-
 main {
   padding: 2rem;
   max-width: 960px;
   margin: 0 auto;
   min-height: calc(100vh - 150px);
 }
-
-/* Class .app-wrapper tidak lagi membutuhkan z-index
-  karena latar belakang sekarang menjadi bagian dari body.
-*/
+.app-wrapper {
+  position: relative;
+  z-index: 1;
+}
 </style>
 

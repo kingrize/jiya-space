@@ -1,40 +1,20 @@
 <!-- File: src/views/ProjectsView.vue -->
-<!-- (DIPERBARUI) Memperbaiki bug loading skeleton yang macet. -->
+<!-- (FILE BARU) Halaman Proyek yang bersih dan bebas bug. -->
 <script setup>
-import { ref, onMounted } from 'vue';
 import ProjectCard from '../components/ui/ProjectCard.vue';
-import ProjectCardSkeleton from '../components/ui/ProjectCardSkeleton.vue';
 import { projects } from '../data/projects.js';
-
-const loading = ref(true);
-const projectData = ref([]);
-
-onMounted(() => {
-  // Simulasikan pemuatan data dari API dengan jeda 1 detik
-  // Ini akan memastikan skeleton loader terlihat sebelum konten muncul.
-  setTimeout(() => {
-    projectData.value = projects;
-    loading.value = false;
-  }, 1000); // 1000ms = 1 detik
-});
 </script>
 
 <template>
   <div class="page-container fade-in-up">
     <div class="page-header">
       <h1 class="page-title">Projects</h1>
-      <p class="page-subtitle">A collection of things I've built and experimented with in JiyaOS.</p>
+    <p class="page-subtitle">A collection of things I've built and experimented with in JiyaOS.</p>
     </div>
     
-    <!-- Tampilkan skeleton loader saat loading -->
-    <div v-if="loading" class="projects-grid">
-      <ProjectCardSkeleton v-for="n in 3" :key="`skeleton-${n}`" />
-    </div>
-
-    <!-- Tampilkan data proyek setelah selesai dimuat -->
-    <div v-else class="projects-grid">
+    <div class="projects-grid">
       <ProjectCard 
-        v-for="(project, index) in projectData" 
+        v-for="(project, index) in projects" 
         :key="project.id"
         :title="project.title"
         :description="project.description"
@@ -69,7 +49,6 @@ onMounted(() => {
   gap: 1.5rem;
 }
 
-/* Staggered animation delay for project cards */
 .projects-grid > * {
   transition-delay: var(--delay, 0s);
 }

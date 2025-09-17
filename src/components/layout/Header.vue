@@ -1,26 +1,23 @@
+<!-- File: src/components/layout/Header.vue -->
+<!-- (DIPERBARUI) Tautan navigasi ke Proyek ditambahkan kembali. -->
 <script setup>
+// ... (logika script tetap sama) ...
 import { ref, onMounted, onUnmounted } from 'vue';
 import Avatar from '../ui/Avatar.vue';
 import ThemeToggle from '../ui/ThemeToggle.vue';
 import HamburgerButton from '../ui/HamburgerButton.vue';
 import MobileNav from './MobileNav.vue';
 
-// State untuk menu mobile
 const isMobileMenuOpen = ref(false);
 const scrolled = ref(false);
-
 const handleScroll = () => { scrolled.value = window.scrollY > 10; };
-
-// State untuk data Spotify dan status
 const song = ref(null);
 const status = ref('Loading status...');
 let intervalId = null;
-
 const randomStatuses = [
   'Crafting new ideas.', 'Exploring the web.', 'Probably drinking coffee.',
   'Building digital things.', 'Thinking about design.',
 ];
-
 const fetchNowPlaying = async () => {
   try {
     const response = await fetch('/.netlify/functions/get-spotify-now-playing');
@@ -36,13 +33,11 @@ const fetchNowPlaying = async () => {
     status.value = randomStatuses[Math.floor(Math.random() * randomStatuses.length)];
   }
 };
-
 onMounted(() => {
   window.addEventListener('scroll', handleScroll);
   fetchNowPlaying();
   intervalId = setInterval(fetchNowPlaying, 30000);
 });
-
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll);
   if (intervalId) { clearInterval(intervalId); }
@@ -69,7 +64,7 @@ onUnmounted(() => {
 
       <nav class="desktop-nav">
         <router-link to="/">Home</router-link>
-        <router-link to="/projects">Projects</router-link>
+        <router-link to="/projects">Projects</router-link> <!-- Tambahkan kembali -->
         <router-link to="/about">About</router-link>
         <ThemeToggle />
       </nav>
@@ -83,7 +78,7 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-/* Style tidak berubah, gunakan yang sudah ada */
+/* Style tidak berubah */
 .header-container {
   padding: 1rem 2rem;
   position: sticky;
@@ -91,14 +86,12 @@ onUnmounted(() => {
   z-index: 50;
   transition: background-color 0.3s, border-bottom-color 0.3s;
 }
-
 .header-container.scrolled {
   background-color: var(--header-bg);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid rgba(var(--border-color-rgb), 0.1);
 }
-
 .header-content {
   max-width: 960px;
   margin: 0 auto;
@@ -106,25 +99,21 @@ onUnmounted(() => {
   justify-content: space-between;
   align-items: center;
 }
-
 .profile-section {
   display: flex;
   align-items: center;
   gap: 0.75rem;
   overflow: hidden;
 }
-
 .status-container {
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
-
 .name {
   font-weight: 600;
   font-size: 1.1rem;
 }
-
 .status {
   font-size: 0.85rem;
   color: var(--text-color-secondary);
@@ -132,38 +121,26 @@ onUnmounted(() => {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
 .desktop-nav {
   display: flex;
   align-items: center;
   gap: 1.5rem;
 }
-
 .desktop-nav a {
   text-decoration: none;
   color: var(--text-color-secondary);
   font-weight: 500;
   transition: color 0.2s;
 }
-
 .desktop-nav a:hover,
 .desktop-nav a.router-link-exact-active {
   color: var(--text-color-primary);
 }
-
-.mobile-nav-toggle {
-  display: none;
-}
-
+.mobile-nav-toggle { display: none; }
 @media (max-width: 768px) {
-  .desktop-nav {
-    display: none;
-  }
-  .mobile-nav-toggle {
-    display: block;
-  }
-  .header-container {
-    padding: 1rem;
-  }
+  .desktop-nav { display: none; }
+  .mobile-nav-toggle { display: block; }
+  .header-container { padding: 1rem; }
 }
 </style>
+

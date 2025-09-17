@@ -1,10 +1,10 @@
 <!-- File: src/views/HomeView.vue -->
-<!-- (DIPERBARUI) Menggunakan komponen ContentCard yang sudah disederhanakan. -->
+<!-- (DIPERBARUI) Dirombak total dengan widget sistem yang dinamis. -->
 <script setup>
 import { ref } from 'vue';
 import { RouterLink } from 'vue-router';
-import ContentCard from '../components/ui/ContentCard.vue';
-import avatarUrl from '../assets/images/avatar.jpg';
+import SystemInfo from '../components/ui/SystemInfo.vue';
+import SystemClock from '../components/ui/SystemClock.vue';
 
 const contentSection = ref(null);
 
@@ -19,59 +19,51 @@ const scrollToContent = () => {
   <div class="home-view">
     <!-- Hero Section -->
     <section class="hero-section">
-      <h1 class="hero-title animated-gradient fade-in-up">Jiya's Digital Space</h1>
+      <h1 class="hero-title animated-gradient fade-in-up">JiyaOS</h1>
       <p class="hero-subtitle fade-in-up" style="animation-delay: 0.2s;">
-        A passionate front-end developer crafting beautiful, interactive, and user-centric web applications.
+        A personal desktop experience by a passionate front-end developer.
       </p>
       <button @click="scrollToContent" class="hero-cta fade-in-up" style="animation-delay: 0.4s;">
         Explore Desktop
       </button>
     </section>
 
-    <!-- macOS-style Bento Grid -->
+    <!-- Redesigned Bento Grid as a Desktop -->
     <section ref="contentSection" class="bento-grid">
-      <!-- Item 1: About Me (Large) -->
-      <div class="bento-item about-teaser" v-animate-on-scroll>
-        <router-link to="/about" class="teaser-link glass-effect">
-          <div class="header-dots">
-            <span></span><span></span><span></span>
-          </div>
-          <img :src="avatarUrl" alt="Jiya Avatar" class="teaser-avatar" />
-          <div class="teaser-text">
-            <h3>About Me</h3>
-            <p>Discover my journey and skills.</p>
-          </div>
-        </router-link>
+      <!-- Item 1: System Info -->
+      <div class="bento-item system-info" v-animate-on-scroll>
+        <SystemInfo />
       </div>
 
-      <!-- Item 2: Projects (Medium) -->
-      <div class="bento-item projects-cta" v-animate-on-scroll style="--delay: 0.1s;">
-         <router-link to="/projects" class="cta-link glass-effect">
-            <div class="header-dots">
-              <span></span><span></span><span></span>
-            </div>
-            <v-icon name="co-folder" scale="3" />
-            <h3>Projects</h3>
-         </router-link>
+      <!-- Item 2: System Clock -->
+      <div class="bento-item system-clock" v-animate-on-scroll style="--delay: 0.1s;">
+        <SystemClock />
       </div>
 
-      <!-- Item 3: Quote (Medium) -->
-      <div class="bento-item quote-card" v-animate-on-scroll style="--delay: 0.2s;">
-        <!-- Tidak perlu lagi wrapper .glass-effect -->
-        <ContentCard title="Guiding Principle">
-          <blockquote>
-            "Good design is obvious. Great design is transparent."
-            <cite>- Joe Sparano</cite>
-          </blockquote>
-        </ContentCard>
+      <!-- Item 3: File Explorer (Navigation) -->
+      <div class="bento-item file-explorer" v-animate-on-scroll style="--delay: 0.2s;">
+        <div class="window-header">/home/jiya/</div>
+        <div class="file-list">
+          <router-link to="/projects" class="file-item">
+            <v-icon name="co-folder" scale="1.5" />
+            <span>Projects</span>
+          </router-link>
+          <router-link to="/about" class="file-item">
+            <v-icon name="co-user" scale="1.5" />
+            <span>About</span>
+          </router-link>
+          <a href="https://github.com/kingrize" target="_blank" class="file-item">
+            <v-icon name="co-github" scale="1.5" />
+            <span>GitHub</span>
+          </a>
+        </div>
       </div>
     </section>
   </div>
 </template>
 
 <style scoped>
-.home-view { font-family: 'Inter', sans-serif; }
-/* Hero Section */
+/* Hero Section styles (tidak berubah) */
 .hero-section {
   text-align: center;
   padding: 6rem 1rem;
@@ -124,63 +116,73 @@ const scrollToContent = () => {
   box-shadow: 0 6px 15px rgba(0, 122, 255, 0.3);
 }
 
-/* macOS Bento Grid */
+/* Redesigned Bento Grid */
 .bento-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(2, minmax(250px, auto));
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: minmax(220px, auto);
   gap: 1.5rem;
   padding-top: 2rem;
 }
-.bento-item.about-teaser { grid-column: 1 / 2; grid-row: 1 / 3; }
-.bento-item.projects-cta { grid-column: 2 / 3; grid-row: 1 / 2; }
-.bento-item.quote-card { grid-column: 2 / 3; grid-row: 2 / 3; }
 
-.bento-item > * { height: 100%; width: 100%; text-decoration: none; }
-
-/* Efek Kaca untuk tautan, karena ContentCard sudah memiliki gayanya sendiri */
-.glass-effect {
-  background: rgba(var(--card-bg-rgb), 0.5);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(var(--border-color-rgb), 0.2);
-  border-radius: 20px;
+.bento-item > * {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  padding: 1.5rem;
-  display: flex;
-  flex-direction: column;
 }
-.bento-item:hover .glass-effect {
+.bento-item:hover > * {
   transform: translateY(-8px);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
-.header-dots {
-  position: absolute;
-  top: 1rem;
-  left: 1rem;
+/* Item placements */
+.bento-item.system-info { grid-column: 1 / 3; grid-row: 1 / 2; }
+.bento-item.system-clock { grid-column: 3 / 4; grid-row: 1 / 2; }
+.bento-item.file-explorer { grid-column: 1 / 4; grid-row: 2 / 3; }
+
+/* File Explorer Card */
+.file-explorer {
+  background: rgba(var(--card-bg-rgb), 0.4);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid rgba(var(--border-color-rgb), 0.1);
+  border-radius: 16px;
+  overflow: hidden;
   display: flex;
-  gap: 0.5rem;
+  flex-direction: column;
 }
-.header-dots span {
-  width: 12px; height: 12px; border-radius: 50%;
-  background: #ff5f56;
+.window-header {
+  background-color: rgba(var(--card-bg-rgb), 0.3);
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid rgba(var(--border-color-rgb), 0.1);
+  color: var(--text-color-secondary);
+  font-family: 'Fira Code', monospace;
+  font-size: 0.8rem;
+  text-align: center;
 }
-.header-dots span:nth-child(2) { background: #ffbd2e; }
-.header-dots span:nth-child(3) { background: #27c93f; }
-
-/* Specific item styles */
-.about-teaser .teaser-link { justify-content: center; align-items: center; text-align: center; }
-.teaser-avatar { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; margin-top: 2rem; margin-bottom: 1rem; }
-.teaser-text h3 { font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--text-color-primary); }
-.teaser-text p { color: var(--text-color-secondary); }
-
-.projects-cta .cta-link { justify-content: center; align-items: center; color: var(--text-color-primary); }
-.projects-cta .v-icon { margin-bottom: 1rem; }
-.projects-cta h3 { font-size: 1.5rem; }
-
-.quote-card blockquote { color: var(--text-color-secondary); font-size: 1.1rem; }
-.quote-card cite { color: var(--text-color-primary); }
+.file-list {
+  padding: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1.5rem;
+  align-items: center;
+  flex-grow: 1;
+}
+.file-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: var(--text-color-primary);
+  padding: 1rem;
+  border-radius: 12px;
+  transition: background-color 0.2s;
+}
+.file-item:hover {
+  background-color: rgba(var(--border-color-rgb), 0.2);
+}
+.file-item span {
+  font-weight: 500;
+}
 
 /* Responsive adjustments */
 @media (max-width: 960px) {
@@ -188,9 +190,7 @@ const scrollToContent = () => {
     grid-template-columns: 1fr;
     grid-auto-rows: auto;
   }
-  .bento-item.about-teaser,
-  .bento-item.projects-cta,
-  .bento-item.quote-card {
+  .bento-item.system-info, .bento-item.system-clock, .bento-item.file-explorer {
     grid-column: auto;
     grid-row: auto;
   }

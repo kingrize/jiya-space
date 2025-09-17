@@ -1,3 +1,5 @@
+<!-- File: src/components/layout/MobileNav.vue -->
+<!-- (DIPERBARUI) Tautan navigasi ke Proyek dihapus. -->
 <script setup>
 import ThemeToggle from '../ui/ThemeToggle.vue';
 
@@ -13,12 +15,11 @@ const emit = defineEmits(['close']);
 
 <template>
   <div class="mobile-nav-overlay" :class="{ 'is-open': isOpen }" @click="emit('close')"></div>
-
   <aside class="mobile-nav-panel" :class="{ 'is-open': isOpen }">
     <nav>
       <ul>
         <li><router-link to="/" @click="emit('close')">Home</router-link></li>
-        <li><router-link to="/projects" @click="emit('close')">Projects</router-link></li>
+        <!-- Tautan Proyek dihapus -->
         <li><router-link to="/about" @click="emit('close')">About</router-link></li>
       </ul>
     </nav>
@@ -29,8 +30,9 @@ const emit = defineEmits(['close']);
 </template>
 
 <style scoped>
+/* Style tidak berubah */
 .mobile-nav-overlay {
-  position: fixed; /* Kunci agar menjadi overlay */
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
@@ -41,14 +43,12 @@ const emit = defineEmits(['close']);
   transition: opacity 0.3s ease, visibility 0.3s ease;
   z-index: 98;
 }
-
 .mobile-nav-overlay.is-open {
   opacity: 1;
   visibility: visible;
 }
-
 .mobile-nav-panel {
-  position: fixed; /* Kunci agar menjadi overlay dan bisa 'slide' */
+  position: fixed;
   top: 0;
   right: 0;
   width: 80%;
@@ -64,28 +64,18 @@ const emit = defineEmits(['close']);
   justify-content: space-between;
   padding: 6rem 2rem 2rem;
 }
-
-.mobile-nav-panel.is-open {
-  transform: translateX(0);
-}
-
-ul {
-  list-style: none;
-}
-
-li {
-  margin-bottom: 2rem;
-}
-
+.mobile-nav-panel.is-open { transform: translateX(0); }
+ul { list-style: none; }
+li { margin-bottom: 2rem; }
 a {
   text-decoration: none;
   color: var(--text-color-primary);
   font-size: 1.5rem;
   font-weight: 600;
 }
-
 .bottom-action {
   display: flex;
   justify-content: center;
 }
 </style>
+

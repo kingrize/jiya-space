@@ -1,5 +1,5 @@
 // File: src/main.js
-// (DIPERBARUI) Menambahkan ikon baru untuk tumpukan teknologi.
+// (DIPERBARUI) Mendaftarkan ikon baru untuk Command Palette.
 
 import { createApp } from 'vue';
 import { createHead } from '@vueuse/head';
@@ -7,18 +7,19 @@ import App from './App.vue';
 import router from './router';
 import { animateOnScroll } from './directives/animateOnScroll';
 
-// Icon Library Setup
 import { OhVueIcon, addIcons } from "oh-vue-icons";
 import { 
-  FaSun, FaMoon, CoGithub, HiExternalLink,
+  FaSun, FaMoon, CoGithub,
   CoInstagram, CoFacebook, FaGhost,
-  SiVuedotjs, SiVite, SiJavascript, SiCss3 // <-- TAMBAHKAN INI
+  HiExternalLink, CoFolder,
+  CoSearch, CoHome, CoUser // <-- Tambahkan ikon baru
 } from "oh-vue-icons/icons";
 
 addIcons(
-  FaSun, FaMoon, CoGithub, HiExternalLink,
+  FaSun, FaMoon, CoGithub,
   CoInstagram, CoFacebook, FaGhost,
-  SiVuedotjs, SiVite, SiJavascript, SiCss3 // <-- TAMBAHKAN INI
+  HiExternalLink, CoFolder,
+  CoSearch, CoHome, CoUser // <-- Tambahkan ikon baru
 );
 
 import './assets/main.css';
