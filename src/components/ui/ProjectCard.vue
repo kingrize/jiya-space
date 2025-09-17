@@ -1,91 +1,92 @@
-<!-- File: src/components/ui/ProjectCard.vue -->
-<!-- (DIPERBARUI) Menambahkan v-if pada v-for untuk mencegah error jika data 'tags' tidak ada. -->
-<script setup>
-defineProps({
-  title: String,
-  description: String,
-  tags: Array,
-  githubUrl: String,
-  liveUrl: String
-});
-</script>
-
+<!-- File: src/components/ui/ProjectCardSkeleton.vue -->
+<!-- (DIPERBARUI) Mengadopsi gaya "frosted glass" dan animasi shimmer yang lebih baik. -->
 <template>
-  <div class="project-card">
-    <div class="card-header">
-      <h3 class="project-title">{{ title }}</h3>
-      <div class="project-links">
-        <a v-if="githubUrl" :href="githubUrl" target="_blank" rel="noopener noreferrer" aria-label="GitHub repository">
-          <v-icon name="co-github" />
-        </a>
-        <a v-if="liveUrl" :href="liveUrl" target="_blank" rel="noopener noreferrer" aria-label="Live demo">
-          <v-icon name="hi-external-link" />
-        </a>
-      </div>
+  <div class="project-card-skeleton">
+    <div class="header-dots">
+      <span></span><span></span><span></span>
     </div>
-    <p class="project-description">{{ description }}</p>
-    <!-- Pemeriksaan Keamanan: Hanya tampilkan bagian ini jika 'tags' ada dan tidak kosong -->
-    <div v-if="tags && tags.length > 0" class="tags">
-      <span v-for="tag in tags" :key="tag" class="tech-tag">{{ tag }}</span>
+    <div class="card-content">
+      <div class="skeleton-line title"></div>
+      <div class="skeleton-line description"></div>
+      <div class="skeleton-line description short"></div>
+      <div class="tags-container">
+        <div class="skeleton-tag"></div>
+        <div class="skeleton-tag"></div>
+        <div class="skeleton-tag"></div>
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.project-card {
-  background-color: var(--card-bg);
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
-  padding: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+.project-card-skeleton {
+  background: rgba(var(--card-bg-rgb), 0.4);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid rgba(var(--border-color-rgb), 0.1);
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
 }
 
-.project-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+.header-dots {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  display: flex;
+  gap: 0.5rem;
+}
+.header-dots span {
+  width: 12px; height: 12px; border-radius: 50%;
+  background: rgba(var(--border-color-rgb), 0.5);
 }
 
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+.card-content {
+  padding: 3.5rem 1.5rem 1.5rem;
+}
+
+.skeleton-line, .skeleton-tag {
+  background: linear-gradient(
+    90deg,
+    rgba(var(--border-color-rgb), 0.2) 25%,
+    rgba(var(--border-color-rgb), 0.5) 50%,
+    rgba(var(--border-color-rgb), 0.2) 75%
+  );
+  background-size: 200% 100%;
+  border-radius: 8px;
+  animation: shimmer 1.5s infinite;
+}
+
+.skeleton-line {
+  height: 20px;
+  margin-bottom: 1rem;
+}
+
+.skeleton-line.title {
+  width: 60%;
+  height: 28px;
+}
+
+.skeleton-line.description {
+  width: 100%;
+  height: 16px;
   margin-bottom: 0.75rem;
 }
 
-.project-title {
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin-right: 1rem;
+.skeleton-line.description.short {
+  width: 80%;
 }
 
-.project-links {
+.tags-container {
   display: flex;
-  gap: 0.75rem;
-}
-
-.project-links a {
-  color: var(--text-color-secondary);
-  font-size: 1.2rem;
-  transition: color 0.2s;
-}
-
-.project-links a:hover {
-  color: var(--accent-color);
-}
-
-.project-description {
-  color: var(--text-color-secondary);
-  margin-bottom: 1rem;
-  flex-grow: 1; /* Makes description take available space */
-}
-
-.tags {
-  display: flex;
-  flex-wrap: wrap;
   gap: 0.5rem;
-  margin-top: auto; /* Pushes tags to the bottom */
+  margin-top: 1.5rem;
+}
+
+.skeleton-tag {
+  width: 70px;
+  height: 28px;
+  border-radius: 9999px;
 }
 </style>
 

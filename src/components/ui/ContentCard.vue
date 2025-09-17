@@ -1,5 +1,5 @@
 <!-- File: src/components/ui/ContentCard.vue -->
-<!-- (DIPERBARUI) Menambahkan efek 'glow' saat hover. -->
+<!-- (DIPERBARUI) Mengintegrasikan efek "frosted glass" langsung ke dalam komponen. -->
 <script setup>
 defineProps({
   title: {
@@ -11,7 +11,10 @@ defineProps({
 
 <template>
   <div class="content-card">
-    <h3>{{ title }}</h3>
+    <div class="header-dots">
+      <span></span><span></span><span></span>
+    </div>
+    <h3 class="card-title">{{ title }}</h3>
     <div class="card-content">
       <slot></slot>
     </div>
@@ -19,29 +22,60 @@ defineProps({
 </template>
 
 <style scoped>
+/* Efek "Frosted Glass" sekarang menjadi bagian dari komponen ini */
 .content-card {
-  background-color: var(--card-bg);
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
-  padding: 1.5rem;
-  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  background: rgba(var(--card-bg-rgb), 0.5);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(var(--border-color-rgb), 0.2);
+  border-radius: 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative; /* Diperlukan untuk header dots & title */
 }
 
 .content-card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 8px 25px rgba(0, 122, 255, 0.1); /* Efek 'glow' */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
-h3 {
-  margin-bottom: 1rem;
-  border-bottom: 1px solid var(--border-color);
-  padding-bottom: 0.75rem;
-  font-size: 1rem;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
+.header-dots {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.header-dots span {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #ff5f56;
+}
+
+.header-dots span:nth-child(2) { background: #ffbd2e; }
+.header-dots span:nth-child(3) { background: #27c93f; }
+
+.card-title {
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 500;
   color: var(--text-color-secondary);
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid rgba(var(--border-color-rgb), 0.2);
+  padding-top: 2rem; /* Memberi ruang di bawah header dots */
+}
+
+.card-content {
+  padding: 0 1.5rem 1.5rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 </style>
 
