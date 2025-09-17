@@ -1,7 +1,2 @@
-# File: netlify.toml
-# (FILE BARU) Konfigurasi untuk Netlify.
-# Memberitahu Netlify di mana menemukan serverless functions kita.
-
 [functions]
   directory = "netlify/functions/"
-
