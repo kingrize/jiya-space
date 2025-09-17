@@ -1,5 +1,11 @@
 <!-- File: src/views/AboutView.vue -->
-<!-- (DIPERBARUI) Mengganti placeholder dengan konten bio yang terstruktur. -->
+<!-- (DIPERBARUI) Menggunakan path relatif untuk impor gambar avatar. -->
+<script setup>
+// Menggunakan path relatif untuk memastikan file ditemukan.
+// Dari 'src/views', kita naik satu level ('..') ke 'src', lalu masuk ke 'assets'.
+import avatarUrl from '../assets/images/avatar.jpg';
+</script>
+
 <template>
   <div class="page-container fade-in-up">
     <h1 class="page-title">About Me</h1>
@@ -7,8 +13,8 @@
     
     <div class="about-content">
       <div class="profile-picture-container">
-        <!-- Anda bisa mengganti URL ini dengan foto Anda sendiri -->
-        <img src="https://i.pravatar.cc/150" alt="Jiya's profile picture" class="profile-picture">
+        <!-- Menggunakan variabel avatarUrl yang sudah diimpor -->
+        <img :src="avatarUrl" alt="Jiya's profile picture" class="profile-picture">
       </div>
       <div class="bio-text">
         <h2>Hello, I'm Jiya.</h2>
@@ -18,10 +24,28 @@
         <p>
           I specialize in the modern JavaScript ecosystem, with a strong focus on frameworks like Vue.js. I believe that good design is not just about aesthetics, but also about creating a seamless and enjoyable experience for the end-user.
         </p>
+
+        <div class="social-links">
+          <h3>Connect with me:</h3>
+          <div class="links-container">
+            <a href="https://github.com/kingrize" target="_blank" rel="noopener noreferrer" class="social-link">
+              <v-icon name="co-github" scale="1.1" />
+              <span>GitHub</span>
+            </a>
+            <a href="https://instagram.com/arzhasnoidea" target="_blank" rel="noopener noreferrer" class="social-link">
+              <v-icon name="co-instagram" scale="1.1" />
+              <span>Instagram</span>
+            </a>
+            <a href="https://facebook.com/shallwelife" target="_blank" rel="noopener noreferrer" class="social-link">
+              <v-icon name="co-facebook-f" scale="1.1" />
+              <span>Facebook</span>
+            </a>
+          </div>
+        </div>
+
         <div class="skills-section">
           <h3>Core Skills:</h3>
           <div class="skills-tags">
-            <!-- Kita menggunakan kembali style .tech-tag dari main.css -->
             <span class="tech-tag">JavaScript (ES6+)</span>
             <span class="tech-tag">Vue.js</span>
             <span class="tech-tag">HTML5 & CSS3</span>
@@ -87,6 +111,37 @@
   line-height: 1.7;
 }
 
+.social-links {
+  margin-top: 2rem;
+}
+
+.social-links h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--text-color-secondary);
+}
+
+.links-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.social-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  color: var(--text-color-secondary);
+  transition: color 0.2s;
+  font-weight: 500;
+}
+
+.social-link:hover {
+  color: var(--accent-color);
+}
+
 .skills-section {
   margin-top: 2rem;
 }
@@ -111,6 +166,9 @@
     align-items: center;
     text-align: center;
     gap: 2rem;
+  }
+  .links-container {
+    justify-content: center;
   }
 }
 </style>

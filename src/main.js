@@ -1,30 +1,27 @@
 // File: src/main.js
-// Ini adalah file JavaScript utama yang menginisialisasi aplikasi Vue.
+// (DIPERBARUI) Mendaftarkan library @vueuse/head.
 
 import { createApp } from 'vue';
+import { createHead } from '@vueuse/head'; // <-- 1. Impor createHead
 import App from './App.vue';
 import router from './router';
 
-// Setup Pustaka Ikon (oh-vue-icons)
+// Icon Library Setup
 import { OhVueIcon, addIcons } from "oh-vue-icons";
-import { FaSun, FaMoon } from "oh-vue-icons/icons/fa";
-import { CoGithub, HiExternalLink } from "oh-vue-icons/icons";
+import { FaSun, FaMoon, FaInstagram, FaFacebookF } from "oh-vue-icons/icons/fa";
+import { CoGithub } from "oh-vue-icons/icons/co";
+import { HiExternalLink } from "oh-vue-icons/icons/hi";
 
-// Daftarkan semua ikon yang kita butuhkan secara global.
-addIcons(FaSun, FaMoon, CoGithub, HiExternalLink);
+addIcons(FaSun, FaMoon, CoGithub, HiExternalLink, FaInstagram, FaFacebookF);
 
-// Impor Style Global
 import './assets/main.css';
 
-// Buat instance aplikasi Vue.
 const app = createApp(App);
+const head = createHead(); // <-- 2. Buat instance head
 
-// Gunakan router untuk manajemen halaman.
 app.use(router);
-
-// Daftarkan komponen ikon secara global agar bisa dipakai di mana saja.
+app.use(head); // <-- 3. Gunakan head di aplikasi
 app.component("v-icon", OhVueIcon);
 
-// "Pasang" aplikasi Vue ke elemen #app di index.html.
 app.mount('#app');
 

@@ -1,7 +1,8 @@
 <!-- File: src/components/ui/Avatar.vue -->
-<!-- Komponen kecil yang dapat dipakai ulang hanya untuk menampilkan avatar. -->
+<!-- (DIPERBARUI) Menggunakan path relatif sebagai alternatif. -->
 <script setup>
-const avatarUrl = 'https://i.pravatar.cc/40';
+// Ganti path '@' dengan path relatif.
+import avatarUrl from '../../assets/images/avatar.jpg';
 </script>
 
 <template>
