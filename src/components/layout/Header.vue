@@ -1,5 +1,3 @@
-<!-- File: src/components/layout/Header.vue -->
-<!-- (DIPERBARUI) Menambahkan kembali logika deteksi scroll untuk efek blur. -->
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
 import Avatar from '../ui/Avatar.vue';
@@ -9,13 +7,9 @@ import MobileNav from './MobileNav.vue';
 
 // State untuk menu mobile
 const isMobileMenuOpen = ref(false);
-
-// State untuk efek scroll di header
 const scrolled = ref(false);
 
-const handleScroll = () => {
-  scrolled.value = window.scrollY > 10;
-};
+const handleScroll = () => { scrolled.value = window.scrollY > 10; };
 
 // State untuk data Spotify dan status
 const song = ref(null);
@@ -23,21 +17,16 @@ const status = ref('Loading status...');
 let intervalId = null;
 
 const randomStatuses = [
-  'Crafting new ideas.',
-  'Exploring the web.',
-  'Probably drinking coffee.',
-  'Building digital things.',
-  'Thinking about design.',
+  'Crafting new ideas.', 'Exploring the web.', 'Probably drinking coffee.',
+  'Building digital things.', 'Thinking about design.',
 ];
 
 const fetchNowPlaying = async () => {
   try {
     const response = await fetch('/.netlify/functions/get-spotify-now-playing');
     if (!response.ok) throw new Error();
-    
     const data = await response.json();
     song.value = data;
-
     if (!data.isPlaying) {
       status.value = randomStatuses[Math.floor(Math.random() * randomStatuses.length)];
     }
@@ -49,19 +38,14 @@ const fetchNowPlaying = async () => {
 };
 
 onMounted(() => {
-  // Tambahkan event listener untuk scroll
   window.addEventListener('scroll', handleScroll);
-  // Panggil API Spotify
   fetchNowPlaying();
   intervalId = setInterval(fetchNowPlaying, 30000);
 });
 
 onUnmounted(() => {
-  // Hapus event listener untuk mencegah memory leak
   window.removeEventListener('scroll', handleScroll);
-  if (intervalId) {
-    clearInterval(intervalId);
-  }
+  if (intervalId) { clearInterval(intervalId); }
 });
 </script>
 
@@ -91,12 +75,11 @@ onUnmounted(() => {
       </nav>
 
       <div class="mobile-nav-toggle">
-        <HamburgerButton :is-open="isMobileMenuOpen" @toggle="isMobileMenuOpen = !isMobileMenuOpen" />
+        <HamburgerButton :active="isMobileMenuOpen" @toggle="isMobileMenuOpen = !isMobileMenuOpen" />
       </div>
     </div>
-
-    <MobileNav :is-open="isMobileMenuOpen" @close="isMobileMenuOpen = false" />
   </header>
+  <MobileNav :is-open="isMobileMenuOpen" @close="isMobileMenuOpen = false" />
 </template>
 
 <style scoped>
@@ -184,4 +167,3 @@ onUnmounted(() => {
   }
 }
 </style>
-
