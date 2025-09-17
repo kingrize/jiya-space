@@ -1,5 +1,5 @@
 <!-- File: src/App.vue -->
-<!-- (DIPERBARUI) Dibersihkan dari sisa-sisa desain floating bar. -->
+<!-- (DIPERBARUI) Menambahkan komponen <Transition> untuk efek antar halaman. -->
 <script setup>
 import { computed } from 'vue';
 import { useHead } from '@vueuse/head';
@@ -22,7 +22,17 @@ useHead(computed(() => ({
     <app-header />
 
     <main>
-      <router-view />
+      <router-view v-slot="{ Component }">
+        <!-- 
+          Setiap kali rute berubah, komponen di dalamnya akan
+          menggunakan transisi 'fade' yang kita definisikan di CSS.
+          'mode="out-in"' memastikan halaman lama selesai memudar keluar
+          sebelum halaman baru mulai memudar masuk, untuk efek yang bersih.
+        -->
+        <Transition name="fade" mode="out-in">
+          <component :is="Component" />
+        </Transition>
+      </router-view>
     </main>
 
     <app-footer />

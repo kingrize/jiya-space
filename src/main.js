@@ -1,5 +1,5 @@
 // File: src/main.js
-// (DIPERBARUI) Mendaftarkan ikon Instagram dan Facebook.
+// (DIPERBARUI) Mendaftarkan ikon baru untuk halaman 404.
 
 import { createApp } from 'vue';
 import { createHead } from '@vueuse/head';
@@ -13,8 +13,9 @@ import {
   FaMoon, 
   CoGithub, 
   HiExternalLink,
-  CoInstagram,  // <-- TAMBAHKAN INI
-  CoFacebook    // <-- TAMBAHKAN INI
+  CoInstagram,
+  CoFacebook,
+  FaGhost // <-- TAMBAHKAN INI
 } from "oh-vue-icons/icons";
 
 // Daftarkan semua ikon yang kita butuhkan secara global
@@ -23,8 +24,9 @@ addIcons(
   FaMoon, 
   CoGithub, 
   HiExternalLink,
-  CoInstagram,  // <-- TAMBAHKAN INI
-  CoFacebook    // <-- TAMBAHKAN INI
+  CoInstagram,
+  CoFacebook,
+  FaGhost // <-- TAMBAHKAN INI
 );
 
 import './assets/main.css';
@@ -37,4 +39,3 @@ app.use(head);
 app.component("v-icon", OhVueIcon);
 
 app.mount('#app');
-

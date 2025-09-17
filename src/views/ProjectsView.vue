@@ -1,8 +1,21 @@
 <!-- File: src/views/ProjectsView.vue -->
-<!-- (DIPERBARUI) Memastikan v-if sudah ada di level atas. -->
+<!-- (DIPERBARUI) Menampilkan skeleton loader saat data dimuat. -->
 <script setup>
+import { ref, onMounted } from 'vue';
 import ProjectCard from '../components/ui/ProjectCard.vue';
+import ProjectCardSkeleton from '../components/ui/ProjectCardSkeleton.vue';
 import { projects } from '../data/projects.js';
+
+const loading = ref(true);
+const projectData = ref([]);
+
+onMounted(() => {
+  // Simulasikan pemuatan data dari API dengan jeda 1 detik
+  setTimeout(() => {
+    projectData.value = projects;
+    loading.value = false;
+  }, 1000); // 1000ms = 1 detik
+});
 </script>
 
 <template>
@@ -10,9 +23,15 @@ import { projects } from '../data/projects.js';
     <h1 class="page-title">My Projects</h1>
     <p class="page-subtitle">A collection of things I've built and experimented with.</p>
     
-    <div v-if="projects && projects.length > 0" class="projects-grid">
+    <!-- Tampilkan skeleton loader saat loading -->
+    <div v-if="loading" class="projects-grid">
+      <ProjectCardSkeleton v-for="n in 3" :key="n" />
+    </div>
+
+    <!-- Tampilkan data proyek setelah selesai dimuat -->
+    <div v-else class="projects-grid">
       <ProjectCard 
-        v-for="project in projects" 
+        v-for="project in projectData" 
         :key="project.id"
         :title="project.title"
         :description="project.description"
@@ -21,14 +40,11 @@ import { projects } from '../data/projects.js';
         :live-url="project.liveUrl"
       />
     </div>
-
-    <div v-else class="no-projects-message">
-      <p>There seems to be an issue loading the projects. Please check the data source.</p>
-    </div>
   </div>
 </template>
 
 <style scoped>
+/* Style tidak berubah, gunakan yang sudah ada */
 .page-container {
   padding: 2rem 0;
 }
@@ -51,15 +67,6 @@ import { projects } from '../data/projects.js';
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 1.5rem;
-}
-
-.no-projects-message {
-  text-align: center;
-  color: var(--text-color-secondary);
-  padding: 3rem;
-  background-color: var(--card-bg);
-  border: 1px dashed var(--border-color);
-  border-radius: 12px;
 }
 </style>
 
