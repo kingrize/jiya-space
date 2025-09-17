@@ -25,7 +25,7 @@ import ContentCard from '../components/ui/ContentCard.vue';
       </ContentCard>
       
       <ContentCard title="Current Tech Stack" class="fade-in-up" style="animation-delay: 1s;">
-         <p>Building this space with Vue.js, Vite, and a lot of coffee.</p>
+         <p>Math nya A-nya Apalah.</p>
       </ContentCard>
     </section>
   </div>
