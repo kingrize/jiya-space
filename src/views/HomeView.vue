@@ -1,8 +1,8 @@
 <!-- File: src/views/HomeView.vue -->
-<!-- (DIPERBARUI) Mengganti card statis dengan komponen dinamis NowPlaying. -->
+<!-- (DIPERBARUI) Menghapus card "Now Playing" dari halaman utama. -->
 <script setup>
 import ContentCard from '../components/ui/ContentCard.vue';
-import NowPlaying from '../components/ui/NowPlaying.vue';
+// Komponen NowPlaying tidak lagi dibutuhkan di sini
 </script>
 
 <template>
@@ -25,9 +25,7 @@ import NowPlaying from '../components/ui/NowPlaying.vue';
         </blockquote>
       </ContentCard>
 
-      <ContentCard title="Now Playing" class="fade-in-up" style="animation-delay: 0.7s;">
-        <NowPlaying />
-      </ContentCard>
+      <!-- KARTU "NOW PLAYING" DIHAPUS DARI SINI -->
       
       <ContentCard title="Current Tech Stack" class="fade-in-up" style="animation-delay: 0.8s;">
          <p>Building this space with Vue.js, Vite, and a lot of coffee.</p>
@@ -95,4 +93,3 @@ cite {
   color: var(--text-color-primary);
 }
 </style>
-

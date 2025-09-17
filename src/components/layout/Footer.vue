@@ -1,27 +1,34 @@
 <!-- File: src/components/layout/Footer.vue -->
-<!-- (DIPERBARUI) Menambahkan tautan sosial dan menyempurnakan layout. -->
+<!-- (DIPERBARUI) Dirombak total untuk mengintegrasikan widget NowPlaying. -->
 <script setup>
-const currentYear = new Date().getFullYear();
+import { computed } from 'vue';
+import NowPlaying from '../ui/NowPlaying.vue';
+
+const currentYear = computed(() => new Date().getFullYear());
 </script>
 
 <template>
   <footer class="footer-container">
     <div class="footer-content">
-      <div class="copyright-info">
-        <span>&copy; {{ currentYear }} Jiya.space</span>
-        <span class="separator">|</span>
-        <span>Crafted with Vue.js</span>
+      <!-- Bagian Kiri: Widget Spotify -->
+      <div class="now-playing-section">
+        <NowPlaying />
       </div>
-      <div class="social-links-footer">
-        <a href="https://github.com/kingrize" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="GitHub">
-          <v-icon name="co-github" />
-        </a>
-        <a href="https://instagram.com/arzhasnoidea" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Instagram">
-          <v-icon name="co-instagram" />
-        </a>
-        <a href="https://facebook.com/shallwelife" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Facebook">
-          <v-icon name="co-facebook-f" />
-        </a>
+
+      <!-- Bagian Kanan: Hak Cipta & Tautan Sosial -->
+      <div class="footer-links">
+        <div class="social-links">
+          <a href="https://github.com/kingrize" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+            <v-icon name="co-github" scale="1.2" />
+          </a>
+          <a href="https://instagram.com/arzhasnoidea" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+            <v-icon name="co-instagram" scale="1.2" />
+          </a>
+          <a href="https://facebook.com/shallwelife" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+            <v-icon name="co-facebook" scale="1.2" />
+          </a>
+        </div>
+        <p class="copyright">&copy; {{ currentYear }} Jiya. All rights reserved.</p>
       </div>
     </div>
   </footer>
@@ -29,8 +36,9 @@ const currentYear = new Date().getFullYear();
 
 <style scoped>
 .footer-container {
-  border-top: 1px solid var(--border-color);
   padding: 2rem;
+  border-top: 1px solid var(--border-color);
+  margin-top: 4rem;
 }
 
 .footer-content {
@@ -39,56 +47,55 @@ const currentYear = new Date().getFullYear();
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 1rem;
+  gap: 2rem;
 }
 
-.copyright-info {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: var(--text-color-secondary);
-  font-size: 0.9rem;
+.now-playing-section {
+  flex: 1;
 }
 
-.separator {
-  display: inline-block;
+.footer-links {
+  text-align: right;
+  flex-shrink: 0;
 }
 
-.social-links-footer {
+.social-links {
   display: flex;
   gap: 1.5rem;
+  justify-content: flex-end;
+  margin-bottom: 0.5rem;
 }
 
-.social-icon {
+.social-links a {
   color: var(--text-color-secondary);
-  transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
+  transition: color 0.2s, transform 0.2s;
 }
 
-.social-icon:hover {
-  color: var(--accent-color);
-  transform: translateY(-2px);
+.social-links a:hover {
+  color: var(--text-color-primary);
+  transform: scale(1.1);
+}
+
+.copyright {
+  font-size: 0.9rem;
+  color: var(--text-color-secondary);
 }
 
 /* Penyesuaian untuk layar seluler */
 @media (max-width: 768px) {
   .footer-content {
     flex-direction: column;
+    align-items: flex-start;
     gap: 1.5rem;
   }
 
-  .separator {
-    display: none;
+  .footer-links {
+    text-align: left;
+    width: 100%;
   }
 
-  .copyright-info {
-    flex-direction: column;
-    gap: 0.25rem;
-    order: 2; /* Pindahkan hak cipta ke bawah ikon sosial di seluler */
-  }
-
-  .social-links-footer {
-    order: 1;
+  .social-links {
+    justify-content: flex-start;
   }
 }
 </style>
