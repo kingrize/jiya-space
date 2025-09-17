@@ -1,5 +1,5 @@
 <!-- File: src/views/ProjectsView.vue -->
-<!-- (DIPERBARUI) Menampilkan skeleton loader saat data dimuat. -->
+<!-- (DIPERBARUI) Menerapkan directive scroll pada kartu proyek. -->
 <script setup>
 import { ref, onMounted } from 'vue';
 import ProjectCard from '../components/ui/ProjectCard.vue';
@@ -10,11 +10,10 @@ const loading = ref(true);
 const projectData = ref([]);
 
 onMounted(() => {
-  // Simulasikan pemuatan data dari API dengan jeda 1 detik
   setTimeout(() => {
     projectData.value = projects;
     loading.value = false;
-  }, 1000); // 1000ms = 1 detik
+  }, 1000);
 });
 </script>
 
@@ -23,12 +22,10 @@ onMounted(() => {
     <h1 class="page-title">My Projects</h1>
     <p class="page-subtitle">A collection of things I've built and experimented with.</p>
     
-    <!-- Tampilkan skeleton loader saat loading -->
     <div v-if="loading" class="projects-grid">
       <ProjectCardSkeleton v-for="n in 3" :key="n" />
     </div>
 
-    <!-- Tampilkan data proyek setelah selesai dimuat -->
     <div v-else class="projects-grid">
       <ProjectCard 
         v-for="project in projectData" 
@@ -38,6 +35,7 @@ onMounted(() => {
         :tags="project.tags"
         :github-url="project.githubUrl"
         :live-url="project.liveUrl"
+        v-animate-on-scroll
       />
     </div>
   </div>

@@ -1,5 +1,5 @@
 <!-- File: src/App.vue -->
-<!-- (DIPERBARUI) Menambahkan komponen <Transition> untuk efek antar halaman. -->
+<!-- (DIPERBARUI) Semua logika Vanta.js dihapus untuk menyederhanakan komponen. -->
 <script setup>
 import { computed } from 'vue';
 import { useHead } from '@vueuse/head';
@@ -18,23 +18,16 @@ useHead(computed(() => ({
 </script>
 
 <template>
+  <!-- Tidak ada lagi elemen latar belakang terpisah -->
   <div class="app-wrapper">
     <app-header />
-
     <main>
       <router-view v-slot="{ Component }">
-        <!-- 
-          Setiap kali rute berubah, komponen di dalamnya akan
-          menggunakan transisi 'fade' yang kita definisikan di CSS.
-          'mode="out-in"' memastikan halaman lama selesai memudar keluar
-          sebelum halaman baru mulai memudar masuk, untuk efek yang bersih.
-        -->
         <Transition name="fade" mode="out-in">
           <component :is="Component" />
         </Transition>
       </router-view>
     </main>
-
     <app-footer />
   </div>
 </template>
@@ -53,5 +46,9 @@ main {
   margin: 0 auto;
   min-height: calc(100vh - 150px);
 }
+
+/* Class .app-wrapper tidak lagi membutuhkan z-index
+  karena latar belakang sekarang menjadi bagian dari body.
+*/
 </style>
 
