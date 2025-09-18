@@ -1,5 +1,5 @@
 <!-- File: src/components/ui/DisclaimerBanner.vue -->
-<!-- (DIPERBARUI) Desain dirombak dengan warna solid, perbaikan responsif, dan teks yang disempurnakan. -->
+<!-- (DIPERBARUI) Desain dirombak dengan warna baru dan perbaikan bug responsif. -->
 <script setup>
 import { ref } from 'vue';
 
@@ -23,7 +23,7 @@ const isVisible = ref(true);
 
 <style scoped>
 .disclaimer-banner {
-  /* Warna solid baru yang lebih lembut */
+  /* Palet warna baru yang lebih lembut */
   background-color: var(--warning-bg);
   border: 1px solid var(--warning-border);
   color: var(--warning-text);
@@ -32,28 +32,34 @@ const isVisible = ref(true);
   padding: 1rem 1.5rem;
   margin-bottom: 2rem;
   display: flex;
-  /* PERBAIKAN RESPONSIVITAS: Mengizinkan item untuk berada di atas pada layar kecil */
   align-items: flex-start;
   gap: 1rem;
 }
 
 /* Variabel warna untuk Light & Dark mode */
 :root {
-  --warning-bg: #FFF5F5;
-  --warning-border: #FECACA;
-  --warning-text: #B91C1C;
-  --warning-header: #991B1B;
+  --warning-bg: #FFFBEB;
+  --warning-border: #FBBF24;
+  --warning-text: #B45309;
+  --warning-header: #92400E;
 }
 :root.dark {
-  --warning-bg: #4A2A2A;
-  --warning-border: #FCA5A5;
-  --warning-text: #FCA5A5;
-  --warning-header: #FEF2F2;
+  --warning-bg: #4A3A1A;
+  --warning-border: #FBBF24;
+  --warning-text: #FEF3C7;
+  --warning-header: #FEF9C3;
 }
 
 .icon-wrapper {
   flex-shrink: 0;
   margin-top: 0.25rem; /* Menyelaraskan ikon dengan teks */
+  color: var(--warning-border);
+}
+
+/* PERBAIKAN BUG: Memastikan wrapper teks bisa melebar */
+.text-wrapper {
+  flex-grow: 1;
+  min-width: 0; /* Mencegah overflow pada flex item */
 }
 
 .text-wrapper h4 {
@@ -79,7 +85,7 @@ const isVisible = ref(true);
   align-items: center;
   justify-content: center;
   transition: background-color 0.2s;
-  flex-shrink: 0; /* Mencegah tombol mengecil */
+  flex-shrink: 0;
 }
 .close-button:hover {
   background: rgba(0, 0, 0, 0.1);

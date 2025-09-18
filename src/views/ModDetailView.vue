@@ -1,10 +1,10 @@
 <!-- File: src/views/ModDetailView.vue -->
-<!-- (DIPERBARUI) Menambahkan peringatan, detail baru, dan bagian diskusi. -->
+<!-- (DIPERBARUI) Dirombak total untuk tata letak yang lebih bersih dan responsif. -->
 <script setup>
 import { ref, computed, onUnmounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { mods } from '../data/mods.js';
-import DisclaimerBanner from '../components/ui/DisclaimerBanner.vue'; // <-- Impor baru
+import DisclaimerBanner from '../components/ui/DisclaimerBanner.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -15,7 +15,6 @@ if (!mod.value) {
   router.replace('/404');
 }
 
-// Format tanggal
 const formattedDate = computed(() => {
   if (!mod.value?.lastUpdated) return '';
   return new Date(mod.value.lastUpdated).toLocaleDateString('en-US', {
@@ -36,8 +35,7 @@ const startDownload = () => {
     if (countdown.value === 0) {
       clearInterval(countdownInterval);
       window.location.href = mod.value.downloadUrl;
-      // Idealnya, Anda akan me-reset state setelah beberapa saat
-      // setTimeout(() => isDownloading.value = false, 2000);
+      setTimeout(() => isDownloading.value = false, 2000);
     }
   }, 1000);
 };
@@ -60,7 +58,6 @@ onUnmounted(() => {
       
       <div class="card-body">
         <div class="main-content">
-          <!-- Peringatan ditampilkan secara kondisional -->
           <DisclaimerBanner v-if="mod.category === 'Game Mod' || mod.category === 'Script'" />
           
           <div class="section">
@@ -85,7 +82,6 @@ onUnmounted(() => {
             <pre class="instructions">{{ mod.instructions }}</pre>
           </div>
 
-          <!-- Bagian diskusi baru -->
           <div class="section">
             <h2 class="section-title">Discussion</h2>
             <div class="discussion-placeholder">
@@ -97,17 +93,35 @@ onUnmounted(() => {
 
         <aside class="sidebar">
           <div class="info-box">
-            <h3>Details</h3>
-            <p><v-icon name="fa-tag" /> <strong>Version:</strong> {{ mod.version }}</p>
-            <p v-if="mod.minAndroid"><v-icon name="fa-android" /> <strong>Android:</strong> {{ mod.minAndroid }}</p>
-            <p><v-icon name="fa-shield-alt" /> <strong>Root:</strong> {{ mod.requiresRoot ? 'Required' : 'Not Required' }}</p>
-            <p><v-icon name="fa-history" /> <strong>Updated:</strong> {{ formattedDate }}</p>
-            <p><v-icon name="md-download" /> <strong>Downloads:</strong> {{ mod.downloads.toLocaleString() }}</p>
-            
-            <button @click="startDownload" class="download-button" :disabled="isDownloading">
-              <span v-if="!isDownloading">Download</span>
-              <span v-else>Starting in {{ countdown }}...</span>
-            </button>
+            <div class="window-header">/var/log/details</div>
+            <div class="info-content">
+              <div class="info-item">
+                <span class="label"><v-icon name="fa-tag" /> Version</span>
+                <span class="value">{{ mod.version }}</span>
+              </div>
+              <div v-if="mod.minAndroid" class="info-item">
+                <span class="label"><v-icon name="fa-android" /> Android</span>
+                <span class="value">{{ mod.minAndroid }}</span>
+              </div>
+              <div class="info-item">
+                <span class="label"><v-icon name="fa-shield-alt" /> Root</span>
+                <span class="value">{{ mod.requiresRoot ? 'Required' : 'Not Required' }}</span>
+              </div>
+              <div class="info-item">
+                <span class="label"><v-icon name="fa-history" /> Updated</span>
+                <span class="value">{{ formattedDate }}</span>
+              </div>
+              <div class="info-item">
+                <span class="label"><v-icon name="md-download" /> Downloads</span>
+                <span class="value">{{ mod.downloads.toLocaleString() }}</span>
+              </div>
+            </div>
+            <div class="info-footer">
+              <button @click="startDownload" class="download-button" :disabled="isDownloading">
+                <span v-if="!isDownloading">Download</span>
+                <span v-else>Starting in {{ countdown }}...</span>
+              </button>
+            </div>
           </div>
         </aside>
       </div>
@@ -116,14 +130,37 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-/* Style tidak berubah, gunakan yang sudah ada */
-.mod-detail-card { background: rgba(var(--card-bg-rgb), 0.4); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border: 1px solid rgba(var(--border-color-rgb), 0.1); border-radius: 16px; overflow: hidden; margin: 2rem auto; }
+.mod-detail-card {
+  background: rgba(var(--card-bg-rgb), 0.4);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid rgba(var(--border-color-rgb), 0.1);
+  border-radius: 16px;
+  overflow: hidden;
+  margin: 2rem auto;
+}
 .card-header { position: relative; height: 300px; }
 .header-image { width: 100%; height: 100%; object-fit: cover; }
 .header-overlay { position: absolute; bottom: 0; left: 0; width: 100%; padding: 2rem; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); color: white; }
 .mod-title { font-size: 2.5rem; font-weight: 700; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
 .game-tag { display: inline-block; background-color: var(--accent-color); color: white; padding: 0.25rem 0.6rem; border-radius: 9999px; font-size: 0.8rem; font-weight: 500; margin-top: 0.5rem; }
-.card-body { display: grid; grid-template-columns: 3fr 1fr; gap: 2rem; padding: 2rem; }
+
+/* PERBAIKAN: Menggunakan Flexbox untuk layout yang lebih baik */
+.card-body {
+  display: flex;
+  flex-direction: row-reverse; /* Sidebar di kanan pada desktop */
+  gap: 2rem;
+  padding: 2rem;
+}
+.main-content {
+  flex-grow: 1;
+  min-width: 0; /* Mencegah flexbox overflow */
+}
+.sidebar {
+  flex-shrink: 0;
+  width: 280px;
+}
+
 .section { margin-bottom: 2.5rem; }
 .section-title { font-size: 1.5rem; font-weight: 600; margin-bottom: 1rem; border-bottom: 1px solid rgba(var(--border-color-rgb), 0.2); padding-bottom: 0.5rem; }
 
@@ -140,18 +177,63 @@ onUnmounted(() => {
 .discussion-placeholder p { font-weight: 500; margin-bottom: 0.5rem; }
 .discussion-placeholder span { font-size: 0.9rem; color: var(--text-color-secondary); }
 
-.sidebar { position: relative; }
-.info-box { background: rgba(var(--border-color-rgb), 0.1); padding: 1.5rem; border-radius: 12px; position: sticky; top: 100px; }
-.info-box h3 { font-size: 1.2rem; margin-bottom: 1rem; }
-.info-box p { margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; color: var(--text-color-secondary); }
-.info-box p strong { color: var(--text-color-primary); }
-.download-button { display: flex; justify-content: center; align-items: center; gap: 0.5rem; width: 100%; background-color: var(--accent-color); color: white; border: none; padding: 0.75rem 1rem; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; text-decoration: none; transition: all 0.2s; margin-top: 1.5rem; }
+/* PERBAIKAN: Redesign Info Box */
+.info-box {
+  background: rgba(var(--card-bg-rgb), 0.2);
+  border: 1px solid rgba(var(--border-color-rgb), 0.1);
+  border-radius: 16px;
+  position: sticky;
+  top: 100px;
+  overflow: hidden;
+}
+.window-header {
+  background-color: rgba(var(--card-bg-rgb), 0.3);
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid rgba(var(--border-color-rgb), 0.1);
+  color: var(--text-color-secondary);
+  font-family: 'Fira Code', monospace;
+  font-size: 0.8rem;
+  text-align: center;
+}
+.info-content {
+  padding: 1.5rem;
+}
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+.info-item .label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-color-secondary);
+}
+.info-item .value {
+  font-weight: 500;
+  color: var(--text-color-primary);
+}
+.info-footer {
+  padding: 1rem;
+  border-top: 1px solid rgba(var(--border-color-rgb), 0.1);
+}
+.download-button { display: flex; justify-content: center; align-items: center; gap: 0.5rem; width: 100%; background-color: var(--accent-color); color: white; border: none; padding: 0.75rem 1rem; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; text-decoration: none; transition: all 0.2s; }
 .download-button:hover:not(:disabled) { transform: scale(1.05); }
 .download-button:disabled { background-color: var(--text-color-secondary); cursor: not-allowed; }
 
+/* PERBAIKAN: Media query untuk responsivitas */
 @media (max-width: 960px) {
-  .card-body { grid-template-columns: 1fr; }
-  .info-box { position: static; }
+  .card-body {
+    flex-direction: column; /* Stack sidebar di atas */
+  }
+  .sidebar {
+    width: 100%;
+  }
+  .info-box {
+    position: static;
+  }
 }
 </style>
 

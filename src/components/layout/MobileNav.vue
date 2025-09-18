@@ -1,5 +1,5 @@
 <!-- File: src/components/layout/MobileNav.vue -->
-<!-- (DIPERBARUI) Menambahkan subtitel Jepang pada tautan navigasi. -->
+<!-- (DIPERBARUI) Menambahkan kembali tautan "Mods" yang hilang. -->
 <script setup>
 import ThemeToggle from '../ui/ThemeToggle.vue';
 
@@ -14,10 +14,8 @@ const emit = defineEmits(['close']);
 </script>
 
 <template>
-  <!-- Overlay gelap di belakang panel -->
   <div class="mobile-nav-overlay" :class="{ 'is-open': isOpen }" @click="emit('close')"></div>
 
-  <!-- Panel navigasi itu sendiri -->
   <aside class="mobile-nav-panel" :class="{ 'is-open': isOpen }">
     <div class="panel-header">
       <span class="panel-title">JiyaOS // ジヤOS</span>
@@ -39,6 +37,16 @@ const emit = defineEmits(['close']);
             <div class="link-text">
               <span class="en">Projects</span>
               <span class="jp">プロジェクト</span>
+            </div>
+          </router-link>
+        </li>
+        <!-- Tautan "Mods" ditambahkan kembali di sini -->
+        <li>
+          <router-link to="/mods" @click="emit('close')">
+            <v-icon name="io-game-controller" />
+             <div class="link-text">
+              <span class="en">Mods</span>
+              <span class="jp">改造</span>
             </div>
           </router-link>
         </li>
@@ -81,23 +89,19 @@ const emit = defineEmits(['close']);
 }
 
 .mobile-nav-panel {
-  /* Efek Kaca Buram (Frosted Glass) */
   background: rgba(var(--card-bg-rgb), 0.7);
   backdrop-filter: blur(25px);
   -webkit-backdrop-filter: blur(25px);
   border-left: 1px solid rgba(var(--border-color-rgb), 0.1);
-
   position: fixed;
   top: 0;
   right: 0;
   width: 80%;
   max-width: 320px;
   height: 100%;
-  
   transform: translateX(100%);
-  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1); /* Transisi lebih halus */
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
   z-index: 99;
-  
   display: flex;
   flex-direction: column;
 }
