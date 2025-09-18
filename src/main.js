@@ -9,18 +9,19 @@ import { animateOnScroll } from './directives/animateOnScroll';
 
 import { OhVueIcon, addIcons } from "oh-vue-icons";
 import { 
-  FaSun, FaMoon, CoGithub,
-  CoInstagram, CoFacebook, FaGhost,
-  HiExternalLink, CoFolder,
-  CoSearch, CoHome, CoUser // <-- Tambahkan ikon baru
+  FaSun, FaMoon, CoGithub, CoInstagram, CoFacebook, FaGhost,
+  HiExternalLink, CoFolder, CoUser, CoHome, CoSearch,
+  MdDownload, // Sudah ada
+  FaTag, FaAndroid, FaShieldAlt, FaCheckCircle // <-- Ikon baru
 } from "oh-vue-icons/icons";
 
 addIcons(
-  FaSun, FaMoon, CoGithub,
-  CoInstagram, CoFacebook, FaGhost,
-  HiExternalLink, CoFolder,
-  CoSearch, CoHome, CoUser // <-- Tambahkan ikon baru
+  FaSun, FaMoon, CoGithub, CoInstagram, CoFacebook, FaGhost,
+  HiExternalLink, CoFolder, CoUser, CoHome, CoSearch,
+  MdDownload,
+  FaTag, FaAndroid, FaShieldAlt, FaCheckCircle // <-- Ikon baru
 );
+
 
 import './assets/main.css';
 

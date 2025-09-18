@@ -1,7 +1,6 @@
 <!-- File: src/components/layout/Header.vue -->
-<!-- (DIPERBARUI) Menambahkan subtitel Jepang pada navigasi desktop untuk konsistensi. -->
+<!-- (LENGKAP) Versi penuh dengan semua logika dan template. -->
 <script setup>
-// ... (logika script tetap sama) ...
 import { ref, onMounted, onUnmounted } from 'vue';
 import Avatar from '../ui/Avatar.vue';
 import ThemeToggle from '../ui/ThemeToggle.vue';
@@ -10,14 +9,23 @@ import MobileNav from './MobileNav.vue';
 
 const isMobileMenuOpen = ref(false);
 const scrolled = ref(false);
-const handleScroll = () => { scrolled.value = window.scrollY > 10; };
+
+const handleScroll = () => {
+  scrolled.value = window.scrollY > 10;
+};
+
 const song = ref(null);
 const status = ref('Loading status...');
 let intervalId = null;
+
 const randomStatuses = [
-  'Crafting new ideas.', 'Exploring the web.', 'Probably drinking coffee.',
-  'Building digital things.', 'Thinking about design.',
+  'Crafting new ideas.',
+  'Exploring the web.',
+  'Probably drinking coffee.',
+  'Building digital things.',
+  'Thinking about design.',
 ];
+
 const fetchNowPlaying = async () => {
   try {
     const response = await fetch('/.netlify/functions/get-spotify-now-playing');
@@ -33,14 +41,18 @@ const fetchNowPlaying = async () => {
     status.value = randomStatuses[Math.floor(Math.random() * randomStatuses.length)];
   }
 };
+
 onMounted(() => {
   window.addEventListener('scroll', handleScroll);
   fetchNowPlaying();
   intervalId = setInterval(fetchNowPlaying, 30000);
 });
+
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll);
-  if (intervalId) { clearInterval(intervalId); }
+  if (intervalId) {
+    clearInterval(intervalId);
+  }
 });
 </script>
 
@@ -64,22 +76,16 @@ onUnmounted(() => {
 
       <nav class="desktop-nav">
         <router-link to="/">
-          <div class="link-text">
-            <span class="en">Home</span>
-            <span class="jp">ホーム</span>
-          </div>
+          <div class="link-text"><span class="en">Home</span><span class="jp">ホーム</span></div>
         </router-link>
         <router-link to="/projects">
-          <div class="link-text">
-            <span class="en">Projects</span>
-            <span class="jp">プロジェクト</span>
-          </div>
+          <div class="link-text"><span class="en">Projects</span><span class="jp">プロジェクト</span></div>
+        </router-link>
+        <router-link to="/mods">
+          <div class="link-text"><span class="en">Mods</span><span class="jp">改造</span></div>
         </router-link>
         <router-link to="/about">
-          <div class="link-text">
-            <span class="en">About</span>
-            <span class="jp">私について</span>
-          </div>
+          <div class="link-text"><span class="en">About</span><span class="jp">私について</span></div>
         </router-link>
         <ThemeToggle />
       </nav>
@@ -93,7 +99,6 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-/* Style tidak berubah, gunakan yang sudah ada */
 .header-container {
   padding: 1rem 2rem;
   position: sticky;
@@ -165,6 +170,9 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   line-height: 1.3;
+}
+.en {
+  /* Gaya untuk teks bahasa Inggris */
 }
 .jp {
   font-size: 0.7rem;
