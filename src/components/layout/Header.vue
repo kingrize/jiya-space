@@ -1,5 +1,5 @@
 <!-- File: src/components/layout/Header.vue -->
-<!-- (DIPERBARUI) Tautan navigasi ke Proyek ditambahkan kembali. -->
+<!-- (DIPERBARUI) Menambahkan subtitel Jepang pada navigasi desktop untuk konsistensi. -->
 <script setup>
 // ... (logika script tetap sama) ...
 import { ref, onMounted, onUnmounted } from 'vue';
@@ -63,9 +63,24 @@ onUnmounted(() => {
       </div>
 
       <nav class="desktop-nav">
-        <router-link to="/">Home</router-link>
-        <router-link to="/projects">Projects</router-link> <!-- Tambahkan kembali -->
-        <router-link to="/about">About</router-link>
+        <router-link to="/">
+          <div class="link-text">
+            <span class="en">Home</span>
+            <span class="jp">ホーム</span>
+          </div>
+        </router-link>
+        <router-link to="/projects">
+          <div class="link-text">
+            <span class="en">Projects</span>
+            <span class="jp">プロジェクト</span>
+          </div>
+        </router-link>
+        <router-link to="/about">
+          <div class="link-text">
+            <span class="en">About</span>
+            <span class="jp">私について</span>
+          </div>
+        </router-link>
         <ThemeToggle />
       </nav>
 
@@ -78,7 +93,7 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-/* Style tidak berubah */
+/* Style tidak berubah, gunakan yang sudah ada */
 .header-container {
   padding: 1rem 2rem;
   position: sticky;
@@ -124,18 +139,41 @@ onUnmounted(() => {
 .desktop-nav {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 2rem;
 }
 .desktop-nav a {
   text-decoration: none;
   color: var(--text-color-secondary);
   font-weight: 500;
   transition: color 0.2s;
+  position: relative;
+  text-align: center;
 }
+
 .desktop-nav a:hover,
 .desktop-nav a.router-link-exact-active {
   color: var(--text-color-primary);
 }
+
+.desktop-nav a:hover .jp,
+.desktop-nav a.router-link-exact-active .jp {
+  color: var(--accent-color);
+  opacity: 1;
+}
+
+.link-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.3;
+}
+.jp {
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: var(--text-color-secondary);
+  opacity: 0.7;
+  transition: color 0.2s, opacity 0.2s;
+}
+
 .mobile-nav-toggle { display: none; }
 @media (max-width: 768px) {
   .desktop-nav { display: none; }

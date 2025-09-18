@@ -1,5 +1,5 @@
 <!-- File: src/components/layout/MobileNav.vue -->
-<!-- (DIPERBARUI) Dirombak total dengan desain "JiyaOS" dan tautan Proyek ditambahkan kembali. -->
+<!-- (DIPERBARUI) Menambahkan subtitel Jepang pada tautan navigasi. -->
 <script setup>
 import ThemeToggle from '../ui/ThemeToggle.vue';
 
@@ -20,14 +20,37 @@ const emit = defineEmits(['close']);
   <!-- Panel navigasi itu sendiri -->
   <aside class="mobile-nav-panel" :class="{ 'is-open': isOpen }">
     <div class="panel-header">
-      <span class="panel-title">JiyaOS</span>
+      <span class="panel-title">JiyaOS // ジヤOS</span>
     </div>
     <nav class="main-nav">
       <ul>
-        <li><router-link to="/" @click="emit('close')"><v-icon name="co-home" /> Home</router-link></li>
-        <!-- Tautan Proyek ditambahkan kembali di sini -->
-        <li><router-link to="/projects" @click="emit('close')"><v-icon name="co-folder" /> Projects</router-link></li>
-        <li><router-link to="/about" @click="emit('close')"><v-icon name="co-user" /> About</router-link></li>
+        <li>
+          <router-link to="/" @click="emit('close')">
+            <v-icon name="co-home" />
+            <div class="link-text">
+              <span class="en">Home</span>
+              <span class="jp">ホーム</span>
+            </div>
+          </router-link>
+        </li>
+        <li>
+          <router-link to="/projects" @click="emit('close')">
+            <v-icon name="co-folder" />
+            <div class="link-text">
+              <span class="en">Projects</span>
+              <span class="jp">プロジェクト</span>
+            </div>
+          </router-link>
+        </li>
+        <li>
+          <router-link to="/about" @click="emit('close')">
+            <v-icon name="co-user" />
+            <div class="link-text">
+              <span class="en">About</span>
+              <span class="jp">私について</span>
+            </div>
+          </router-link>
+        </li>
       </ul>
     </nav>
     <div class="panel-footer">
@@ -86,10 +109,11 @@ const emit = defineEmits(['close']);
 .panel-header {
   padding: 1rem 1.5rem;
   border-bottom: 1px solid rgba(var(--border-color-rgb), 0.1);
+  font-family: 'Fira Code', monospace;
 }
 
 .panel-title {
-  font-weight: 600;
+  font-weight: 500;
   color: var(--text-color-secondary);
 }
 
@@ -100,6 +124,7 @@ const emit = defineEmits(['close']);
 
 ul {
   list-style: none;
+  padding: 0;
 }
 
 li {
@@ -122,6 +147,22 @@ a {
 a:hover, a.router-link-exact-active {
   background-color: rgba(var(--border-color-rgb), 0.2);
   color: var(--accent-color);
+}
+
+a:hover .jp, a.router-link-exact-active .jp {
+  color: var(--accent-color);
+}
+
+.link-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.3;
+}
+.jp {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--text-color-secondary);
+  transition: color 0.2s;
 }
 
 .panel-footer {
