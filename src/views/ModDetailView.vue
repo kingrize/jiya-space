@@ -1,10 +1,10 @@
 <!-- File: src/views/ModDetailView.vue -->
-<!-- (DIPERBARUI) Tidak ada perubahan logika, hanya untuk memastikan konsistensi. -->
+<!-- (DIPERBARUI) Dirombak total untuk mengimplementasikan modal peringatan risiko. -->
 <script setup>
-import { ref, computed, onUnmounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { mods } from '../data/mods.js';
-import DisclaimerBanner from '../components/ui/DisclaimerBanner.vue';
+import RiskWarningModal from '../components/ui/RiskWarningModal.vue'; // <-- Impor modal baru
 
 const route = useRoute();
 const router = useRouter();
@@ -14,6 +14,29 @@ const mod = computed(() => mods.find(m => m.slug === route.params.slug));
 if (!mod.value) {
   router.replace('/404');
 }
+
+// State baru untuk mengontrol modal dan akses konten
+const isWarningModalOpen = ref(false);
+const contentUnlocked = ref(false);
+
+onMounted(() => {
+  // Hanya tampilkan modal jika mod berisiko DAN belum diterima di sesi ini
+  const isRisky = mod.value.category === 'Game Mod' || mod.value.category === 'Script';
+  const alreadyAccepted = sessionStorage.getItem(`warningAccepted_${mod.value.slug}`);
+  
+  if (isRisky && !alreadyAccepted) {
+    isWarningModalOpen.value = true;
+  } else {
+    contentUnlocked.value = true; // Langsung buka kunci jika tidak berisiko atau sudah diterima
+  }
+});
+
+const handleWarningAccepted = () => {
+  isWarningModalOpen.value = false;
+  contentUnlocked.value = true;
+  // Simpan persetujuan di sessionStorage agar tidak muncul lagi
+  sessionStorage.setItem(`warningAccepted_${mod.value.slug}`, 'true');
+};
 
 const formattedDate = computed(() => {
   if (!mod.value?.lastUpdated) return '';
@@ -46,90 +69,97 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div v-if="mod" class="page-container fade-in-up">
-    <div class="mod-detail-card">
-      <div class="card-header">
-        <img :src="mod.image" :alt="mod.title" class="header-image" />
-        <div class="header-overlay">
-          <h1 class="mod-title">{{ mod.title }}</h1>
-          <span class="game-tag">{{ mod.game }}</span>
-        </div>
-      </div>
-      
-      <div class="card-body">
-        <div class="main-content">
-          <DisclaimerBanner v-if="mod.category === 'Game Mod' || mod.category === 'Script'" />
-          
-          <div class="section">
-            <h2 class="section-title">Description</h2>
-            <p>{{ mod.description }}</p>
-          </div>
+  <div v-if="mod" class="page-container">
+    <!-- Modal akan ditampilkan di atas segalanya -->
+    <RiskWarningModal v-if="isWarningModalOpen" @accept="handleWarningAccepted" />
 
-          <div class="section">
-            <h2 class="section-title">Features</h2>
-            <ul class="features-list">
-              <li v-for="feature in mod.features" :key="feature"><v-icon name="fa-check-circle" /><span>{{ feature }}</span></li>
-            </ul>
-          </div>
-          
-          <div v-if="mod.gallery && mod.gallery.length" class="section">
-            <h2 class="section-title">Gallery</h2>
-            <div class="gallery-grid"><img v-for="(img, index) in mod.gallery" :key="index" :src="img" :alt="`Gallery image ${index + 1}`" /></div>
-          </div>
-          
-          <div class="section">
-            <h2 class="section-title">Installation</h2>
-            <pre class="instructions">{{ mod.instructions }}</pre>
-          </div>
-
-          <div class="section">
-            <h2 class="section-title">Discussion</h2>
-            <div class="discussion-placeholder">
-              <p>Comments and discussions are coming soon to JiyaOS.</p>
-              <span>For now, feel free to reach out via my social media links in the footer.</span>
-            </div>
+    <!-- Konten utama hanya ditampilkan jika sudah 'unlocked' -->
+    <Transition name="fade">
+      <div v-if="contentUnlocked" class="mod-detail-card">
+        <div class="card-header">
+          <img :src="mod.image" :alt="mod.title" class="header-image" />
+          <div class="header-overlay">
+            <h1 class="mod-title">{{ mod.title }}</h1>
+            <span class="game-tag">{{ mod.game }}</span>
           </div>
         </div>
-
-        <aside class="sidebar">
-          <div class="info-box">
-            <div class="window-header">/var/log/details</div>
-            <div class="info-content">
-              <div class="info-item">
-                <span class="label"><v-icon name="fa-tag" /> Version</span>
-                <span class="value">{{ mod.version }}</span>
-              </div>
-              <div v-if="mod.minAndroid" class="info-item">
-                <span class="label"><v-icon name="fa-android" /> Android</span>
-                <span class="value">{{ mod.minAndroid }}</span>
-              </div>
-              <div class="info-item">
-                <span class="label"><v-icon name="fa-shield-alt" /> Root</span>
-                <span class="value">{{ mod.requiresRoot ? 'Required' : 'Not Required' }}</span>
-              </div>
-              <div class="info-item">
-                <span class="label"><v-icon name="fa-history" /> Updated</span>
-                <span class="value">{{ formattedDate }}</span>
-              </div>
-              <div class="info-item">
-                <span class="label"><v-icon name="md-download" /> Downloads</span>
-                <span class="value">{{ mod.downloads.toLocaleString() }}</span>
-              </div>
+        
+        <div class="card-body">
+          <div class="main-content">
+            <!-- DisclaimerBanner yang lama sudah dihapus -->
+            
+            <div class="section">
+              <h2 class="section-title">Description</h2>
+              <p>{{ mod.description }}</p>
             </div>
-            <div class="info-footer">
-              <button @click="startDownload" class="download-button" :disabled="isDownloading">
-                <span v-if="!isDownloading">Download</span>
-                <span v-else>Starting in {{ countdown }}...</span>
-              </button>
+
+            <div class="section">
+              <h2 class="section-title">Features</h2>
+              <ul class="features-list">
+                <li v-for="feature in mod.features" :key="feature"><v-icon name="fa-check-circle" /><span>{{ feature }}</span></li>
+              </ul>
+            </div>
+            
+            <div v-if="mod.gallery && mod.gallery.length" class="section">
+              <h2 class="section-title">Gallery</h2>
+              <div class="gallery-grid"><img v-for="(img, index) in mod.gallery" :key="index" :src="img" :alt="`Gallery image ${index + 1}`" /></div>
+            </div>
+            
+            <div class="section">
+              <h2 class="section-title">Installation</h2>
+              <pre class="instructions">{{ mod.instructions }}</pre>
+            </div>
+
+            <div class="section">
+              <h2 class="section-title">Discussion</h2>
+              <div class="discussion-placeholder">
+                <p>Comments and discussions are coming soon to JiyaOS.</p>
+                <span>For now, feel free to reach out via my social media links in the footer.</span>
+              </div>
             </div>
           </div>
-        </aside>
+
+          <aside class="sidebar">
+            <div class="info-box">
+              <div class="window-header">/var/log/details</div>
+              <div class="info-content">
+                <div class="info-item">
+                  <span class="label"><v-icon name="fa-tag" /> Version</span>
+                  <span class="value">{{ mod.version }}</span>
+                </div>
+                <div v-if="mod.minAndroid" class="info-item">
+                  <span class="label"><v-icon name="fa-android" /> Android</span>
+                  <span class="value">{{ mod.minAndroid }}</span>
+                </div>
+                <div class="info-item">
+                  <span class="label"><v-icon name="fa-shield-alt" /> Root</span>
+                  <span class="value">{{ mod.requiresRoot ? 'Required' : 'Not Required' }}</span>
+                </div>
+                <div class="info-item">
+                  <span class="label"><v-icon name="fa-history" /> Updated</span>
+                  <span class="value">{{ formattedDate }}</span>
+                </div>
+                <div class="info-item">
+                  <span class="label"><v-icon name="md-download" /> Downloads</span>
+                  <span class="value">{{ mod.downloads.toLocaleString() }}</span>
+                </div>
+              </div>
+              <div class="info-footer">
+                <button @click="startDownload" class="download-button" :disabled="isDownloading">
+                  <span v-if="!isDownloading">Download</span>
+                  <span v-else>Starting in {{ countdown }}...</span>
+                </button>
+              </div>
+            </div>
+          </aside>
+        </div>
       </div>
-    </div>
+    </Transition>
   </div>
 </template>
 
 <style scoped>
+/* Style tidak berubah, gunakan yang sudah ada */
 .mod-detail-card {
   background: rgba(var(--card-bg-rgb), 0.4);
   backdrop-filter: blur(25px);
@@ -144,7 +174,6 @@ onUnmounted(() => {
 .header-overlay { position: absolute; bottom: 0; left: 0; width: 100%; padding: 2rem; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); color: white; }
 .mod-title { font-size: 2.5rem; font-weight: 700; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
 .game-tag { display: inline-block; background-color: var(--accent-color); color: white; padding: 0.25rem 0.6rem; border-radius: 9999px; font-size: 0.8rem; font-weight: 500; margin-top: 0.5rem; }
-
 .card-body {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 280px;
@@ -154,24 +183,18 @@ onUnmounted(() => {
 }
 .main-content { grid-area: main; }
 .sidebar { grid-area: sidebar; }
-
 .section { margin-bottom: 2.5rem; }
 .section:last-child { margin-bottom: 0; }
 .section-title { font-size: 1.5rem; font-weight: 600; margin-bottom: 1rem; border-bottom: 1px solid rgba(var(--border-color-rgb), 0.2); padding-bottom: 0.5rem; }
-
 .features-list { list-style: none; padding: 0; }
 .features-list li { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; color: var(--text-color-secondary); }
 .features-list .v-icon { color: var(--accent-color); }
-
 .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
 .gallery-grid img { width: 100%; border-radius: 8px; }
-
 .instructions { background: rgba(var(--border-color-rgb), 0.1); padding: 1rem; border-radius: 8px; white-space: pre-wrap; font-family: 'Fira Code', monospace; line-height: 1.8; }
-
 .discussion-placeholder { background: rgba(var(--border-color-rgb), 0.1); padding: 2rem; border-radius: 12px; text-align: center; border: 1px dashed rgba(var(--border-color-rgb), 0.3); }
 .discussion-placeholder p { font-weight: 500; margin-bottom: 0.5rem; }
 .discussion-placeholder span { font-size: 0.9rem; color: var(--text-color-secondary); }
-
 .info-box {
   background: rgba(var(--card-bg-rgb), 0.2);
   border: 1px solid rgba(var(--border-color-rgb), 0.1);
