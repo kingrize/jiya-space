@@ -1,9 +1,10 @@
 <!-- File: src/views/ModDetailView.vue -->
-<!-- (DIPERBARUI) Menampilkan detail teknis baru dan menambahkan logika unduhan. -->
+<!-- (DIPERBARUI) Menambahkan peringatan, detail baru, dan bagian diskusi. -->
 <script setup>
 import { ref, computed, onUnmounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { mods } from '../data/mods.js';
+import DisclaimerBanner from '../components/ui/DisclaimerBanner.vue'; // <-- Impor baru
 
 const route = useRoute();
 const router = useRouter();
@@ -14,22 +15,29 @@ if (!mod.value) {
   router.replace('/404');
 }
 
-// State untuk tombol unduh
+// Format tanggal
+const formattedDate = computed(() => {
+  if (!mod.value?.lastUpdated) return '';
+  return new Date(mod.value.lastUpdated).toLocaleDateString('en-US', {
+    year: 'numeric', month: 'long', day: 'numeric'
+  });
+});
+
 const isDownloading = ref(false);
 const countdown = ref(3);
 let countdownInterval = null;
 
 const startDownload = () => {
   if (isDownloading.value) return;
-
   isDownloading.value = true;
   countdown.value = 3;
-
   countdownInterval = setInterval(() => {
     countdown.value -= 1;
     if (countdown.value === 0) {
       clearInterval(countdownInterval);
       window.location.href = mod.value.downloadUrl;
+      // Idealnya, Anda akan me-reset state setelah beberapa saat
+      // setTimeout(() => isDownloading.value = false, 2000);
     }
   }, 1000);
 };
@@ -52,6 +60,9 @@ onUnmounted(() => {
       
       <div class="card-body">
         <div class="main-content">
+          <!-- Peringatan ditampilkan secara kondisional -->
+          <DisclaimerBanner v-if="mod.category === 'Game Mod' || mod.category === 'Script'" />
+          
           <div class="section">
             <h2 class="section-title">Description</h2>
             <p>{{ mod.description }}</p>
@@ -60,23 +71,27 @@ onUnmounted(() => {
           <div class="section">
             <h2 class="section-title">Features</h2>
             <ul class="features-list">
-              <li v-for="feature in mod.features" :key="feature">
-                <v-icon name="fa-check-circle" />
-                <span>{{ feature }}</span>
-              </li>
+              <li v-for="feature in mod.features" :key="feature"><v-icon name="fa-check-circle" /><span>{{ feature }}</span></li>
             </ul>
           </div>
           
           <div v-if="mod.gallery && mod.gallery.length" class="section">
             <h2 class="section-title">Gallery</h2>
-            <div class="gallery-grid">
-              <img v-for="(img, index) in mod.gallery" :key="index" :src="img" :alt="`Gallery image ${index + 1}`" />
-            </div>
+            <div class="gallery-grid"><img v-for="(img, index) in mod.gallery" :key="index" :src="img" :alt="`Gallery image ${index + 1}`" /></div>
           </div>
           
           <div class="section">
             <h2 class="section-title">Installation</h2>
             <pre class="instructions">{{ mod.instructions }}</pre>
+          </div>
+
+          <!-- Bagian diskusi baru -->
+          <div class="section">
+            <h2 class="section-title">Discussion</h2>
+            <div class="discussion-placeholder">
+              <p>Comments and discussions are coming soon to JiyaOS.</p>
+              <span>For now, feel free to reach out via my social media links in the footer.</span>
+            </div>
           </div>
         </div>
 
@@ -86,9 +101,10 @@ onUnmounted(() => {
             <p><v-icon name="fa-tag" /> <strong>Version:</strong> {{ mod.version }}</p>
             <p v-if="mod.minAndroid"><v-icon name="fa-android" /> <strong>Android:</strong> {{ mod.minAndroid }}</p>
             <p><v-icon name="fa-shield-alt" /> <strong>Root:</strong> {{ mod.requiresRoot ? 'Required' : 'Not Required' }}</p>
+            <p><v-icon name="fa-history" /> <strong>Updated:</strong> {{ formattedDate }}</p>
+            <p><v-icon name="md-download" /> <strong>Downloads:</strong> {{ mod.downloads.toLocaleString() }}</p>
             
             <button @click="startDownload" class="download-button" :disabled="isDownloading">
-              <v-icon v-if="!isDownloading" name="md-download" />
               <span v-if="!isDownloading">Download</span>
               <span v-else>Starting in {{ countdown }}...</span>
             </button>
@@ -101,15 +117,7 @@ onUnmounted(() => {
 
 <style scoped>
 /* Style tidak berubah, gunakan yang sudah ada */
-.mod-detail-card {
-  background: rgba(var(--card-bg-rgb), 0.4);
-  backdrop-filter: blur(25px);
-  -webkit-backdrop-filter: blur(25px);
-  border: 1px solid rgba(var(--border-color-rgb), 0.1);
-  border-radius: 16px;
-  overflow: hidden;
-  margin: 2rem auto;
-}
+.mod-detail-card { background: rgba(var(--card-bg-rgb), 0.4); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border: 1px solid rgba(var(--border-color-rgb), 0.1); border-radius: 16px; overflow: hidden; margin: 2rem auto; }
 .card-header { position: relative; height: 300px; }
 .header-image { width: 100%; height: 100%; object-fit: cover; }
 .header-overlay { position: absolute; bottom: 0; left: 0; width: 100%; padding: 2rem; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); color: white; }
@@ -128,11 +136,16 @@ onUnmounted(() => {
 
 .instructions { background: rgba(var(--border-color-rgb), 0.1); padding: 1rem; border-radius: 8px; white-space: pre-wrap; font-family: 'Fira Code', monospace; line-height: 1.8; }
 
+.discussion-placeholder { background: rgba(var(--border-color-rgb), 0.1); padding: 2rem; border-radius: 12px; text-align: center; border: 1px dashed rgba(var(--border-color-rgb), 0.3); }
+.discussion-placeholder p { font-weight: 500; margin-bottom: 0.5rem; }
+.discussion-placeholder span { font-size: 0.9rem; color: var(--text-color-secondary); }
+
 .sidebar { position: relative; }
 .info-box { background: rgba(var(--border-color-rgb), 0.1); padding: 1.5rem; border-radius: 12px; position: sticky; top: 100px; }
 .info-box h3 { font-size: 1.2rem; margin-bottom: 1rem; }
-.info-box p { margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
-.download-button { display: flex; justify-content: center; align-items: center; gap: 0.5rem; width: 100%; background-color: var(--accent-color); color: white; border: none; padding: 0.75rem 1rem; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; text-decoration: none; transition: all 0.2s; }
+.info-box p { margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; color: var(--text-color-secondary); }
+.info-box p strong { color: var(--text-color-primary); }
+.download-button { display: flex; justify-content: center; align-items: center; gap: 0.5rem; width: 100%; background-color: var(--accent-color); color: white; border: none; padding: 0.75rem 1rem; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; text-decoration: none; transition: all 0.2s; margin-top: 1.5rem; }
 .download-button:hover:not(:disabled) { transform: scale(1.05); }
 .download-button:disabled { background-color: var(--text-color-secondary); cursor: not-allowed; }
 
