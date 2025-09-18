@@ -1,5 +1,5 @@
 <!-- File: src/views/ModDetailView.vue -->
-<!-- (DIPERBARUI) Dirombak total untuk tata letak yang lebih bersih dan responsif. -->
+<!-- (DIPERBARUI) Tidak ada perubahan logika, hanya untuk memastikan konsistensi. -->
 <script setup>
 import { ref, computed, onUnmounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
@@ -145,23 +145,18 @@ onUnmounted(() => {
 .mod-title { font-size: 2.5rem; font-weight: 700; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
 .game-tag { display: inline-block; background-color: var(--accent-color); color: white; padding: 0.25rem 0.6rem; border-radius: 9999px; font-size: 0.8rem; font-weight: 500; margin-top: 0.5rem; }
 
-/* PERBAIKAN: Menggunakan Flexbox untuk layout yang lebih baik */
 .card-body {
-  display: flex;
-  flex-direction: row-reverse; /* Sidebar di kanan pada desktop */
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  grid-template-areas: "main sidebar";
   gap: 2rem;
   padding: 2rem;
 }
-.main-content {
-  flex-grow: 1;
-  min-width: 0; /* Mencegah flexbox overflow */
-}
-.sidebar {
-  flex-shrink: 0;
-  width: 280px;
-}
+.main-content { grid-area: main; }
+.sidebar { grid-area: sidebar; }
 
 .section { margin-bottom: 2.5rem; }
+.section:last-child { margin-bottom: 0; }
 .section-title { font-size: 1.5rem; font-weight: 600; margin-bottom: 1rem; border-bottom: 1px solid rgba(var(--border-color-rgb), 0.2); padding-bottom: 0.5rem; }
 
 .features-list { list-style: none; padding: 0; }
@@ -177,7 +172,6 @@ onUnmounted(() => {
 .discussion-placeholder p { font-weight: 500; margin-bottom: 0.5rem; }
 .discussion-placeholder span { font-size: 0.9rem; color: var(--text-color-secondary); }
 
-/* PERBAIKAN: Redesign Info Box */
 .info-box {
   background: rgba(var(--card-bg-rgb), 0.2);
   border: 1px solid rgba(var(--border-color-rgb), 0.1);
@@ -195,38 +189,21 @@ onUnmounted(() => {
   font-size: 0.8rem;
   text-align: center;
 }
-.info-content {
-  padding: 1.5rem;
-}
-.info-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-  font-size: 0.9rem;
-}
-.info-item .label {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: var(--text-color-secondary);
-}
-.info-item .value {
-  font-weight: 500;
-  color: var(--text-color-primary);
-}
-.info-footer {
-  padding: 1rem;
-  border-top: 1px solid rgba(var(--border-color-rgb), 0.1);
-}
+.info-content { padding: 1.5rem; }
+.info-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; font-size: 0.9rem; }
+.info-item .label { display: flex; align-items: center; gap: 0.5rem; color: var(--text-color-secondary); }
+.info-item .value { font-weight: 500; color: var(--text-color-primary); }
+.info-footer { padding: 1rem; border-top: 1px solid rgba(var(--border-color-rgb), 0.1); }
 .download-button { display: flex; justify-content: center; align-items: center; gap: 0.5rem; width: 100%; background-color: var(--accent-color); color: white; border: none; padding: 0.75rem 1rem; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; text-decoration: none; transition: all 0.2s; }
 .download-button:hover:not(:disabled) { transform: scale(1.05); }
 .download-button:disabled { background-color: var(--text-color-secondary); cursor: not-allowed; }
 
-/* PERBAIKAN: Media query untuk responsivitas */
 @media (max-width: 960px) {
   .card-body {
-    flex-direction: column; /* Stack sidebar di atas */
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "main"
+      "sidebar";
   }
   .sidebar {
     width: 100%;

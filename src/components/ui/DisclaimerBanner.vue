@@ -1,5 +1,5 @@
 <!-- File: src/components/ui/DisclaimerBanner.vue -->
-<!-- (DIPERBARUI) Desain dirombak dengan warna baru dan perbaikan bug responsif. -->
+<!-- (DIPERBARUI) Dirombak total dengan layout Flexbox yang lebih kuat dan teks yang disederhanakan. -->
 <script setup>
 import { ref } from 'vue';
 
@@ -13,7 +13,7 @@ const isVisible = ref(true);
     </div>
     <div class="text-wrapper">
       <h4>Risk Warning</h4>
-      <p>Please be aware that using third-party mods, scripts, or modified applications can potentially violate a game's Terms of Service. This may result in temporary or permanent suspension of your account. Use at your own risk. The developer is not responsible for any consequences that may arise from the use of these files.</p>
+      <p>Using mods or scripts may violate a game's Terms of Service and could result in an account ban. Please use these files at your own risk.</p>
     </div>
     <button @click="isVisible = false" class="close-button" aria-label="Close warning">
       <v-icon name="fa-times" />
@@ -23,20 +23,19 @@ const isVisible = ref(true);
 
 <style scoped>
 .disclaimer-banner {
-  /* Palet warna baru yang lebih lembut */
   background-color: var(--warning-bg);
   border: 1px solid var(--warning-border);
   color: var(--warning-text);
-  
   border-radius: 12px;
   padding: 1rem 1.5rem;
   margin-bottom: 2rem;
+  
+  /* PERBAIKAN: Menggunakan Flexbox dengan properti yang benar */
   display: flex;
   align-items: flex-start;
   gap: 1rem;
 }
 
-/* Variabel warna untuk Light & Dark mode */
 :root {
   --warning-bg: #FFFBEB;
   --warning-border: #FBBF24;
@@ -52,14 +51,13 @@ const isVisible = ref(true);
 
 .icon-wrapper {
   flex-shrink: 0;
-  margin-top: 0.25rem; /* Menyelaraskan ikon dengan teks */
+  margin-top: 0.25rem;
   color: var(--warning-border);
 }
 
-/* PERBAIKAN BUG: Memastikan wrapper teks bisa melebar */
 .text-wrapper {
-  flex-grow: 1;
-  min-width: 0; /* Mencegah overflow pada flex item */
+  flex: 1; /* Memungkinkan elemen ini untuk membesar */
+  min-width: 0; /* Trik klasik untuk mencegah overflow teks di Flexbox */
 }
 
 .text-wrapper h4 {
@@ -78,7 +76,6 @@ const isVisible = ref(true);
   border: none;
   color: var(--warning-text);
   cursor: pointer;
-  margin-left: auto;
   padding: 0.5rem;
   border-radius: 50%;
   display: flex;
