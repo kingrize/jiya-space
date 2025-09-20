@@ -1,16 +1,26 @@
 <!-- File: src/App.vue -->
-<!-- (DIPERBARUI) Menambahkan container untuk notifikasi toast. -->
+<!-- (LENGKAP) Mengintegrasikan panel pengaturan dan menerapkan settings secara global. -->
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted, watchEffect } from 'vue';
 import { useHead } from '@vueuse/head';
 import { useRoute } from 'vue-router';
 import AppHeader from './components/layout/Header.vue';
 import AppFooter from './components/layout/Footer.vue';
 import CommandPalette from './components/ui/CommandPalette.vue';
-import NotificationToast from './components/ui/NotificationToast.vue'; // <-- Impor baru
+import SettingsPanel from './components/ui/SettingsPanel.vue';
+import { useSettings } from './composables/useSettings';
 
 const route = useRoute();
 const isCommandPaletteOpen = ref(false);
+const isSettingsPanelOpen = ref(false);
+
+const { settings } = useSettings();
+
+watchEffect(() => {
+  document.documentElement.style.setProperty('--accent-color', settings.value.accentColor);
+  document.body.classList.toggle('blobs-hidden', !settings.value.showBlobs);
+  document.body.classList.toggle('grid-hidden', !settings.value.showGrid);
+});
 
 const handleGlobalKeydown = (event) => {
   if ((event.metaKey || event.ctrlKey) && event.key === 'k') {
@@ -38,10 +48,10 @@ useHead(computed(() => ({
         </Transition>
       </router-view>
     </main>
-    <app-footer />
+    <app-footer @open-settings="isSettingsPanelOpen = true" />
     
     <CommandPalette :is-open="isCommandPaletteOpen" @close="isCommandPaletteOpen = false" />
-    <NotificationToast /> <!-- <-- Tambahkan di sini -->
+    <SettingsPanel :is-open="isSettingsPanelOpen" @close="isSettingsPanelOpen = false" />
   </div>
 </template>
 
