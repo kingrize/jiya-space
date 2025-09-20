@@ -1,7 +1,8 @@
 <!-- File: src/components/ui/SettingsPanel.vue -->
-<!-- (FILE BARU) Jendela modal "System Preferences". -->
+<!-- (DIPERBARUI) Menambahkan kontrol untuk Dark Mode. -->
 <script setup>
 import { useSettings } from '../../composables/useSettings.js';
+import { useDark, useToggle } from '@vueuse/core';
 
 defineProps({
   isOpen: Boolean,
@@ -9,6 +10,8 @@ defineProps({
 const emit = defineEmits(['close']);
 
 const { settings, accentColors, setAccentColor } = useSettings();
+const isDark = useDark();
+const toggleDark = useToggle(isDark);
 </script>
 
 <template>
@@ -22,6 +25,13 @@ const { settings, accentColors, setAccentColor } = useSettings();
           </button>
         </div>
         <div class="panel-body">
+          <div class="setting-group">
+            <h4>Appearance</h4>
+            <div class="setting-item">
+              <label for="darkMode">Dark Mode</label>
+              <input type="checkbox" id="darkMode" :checked="isDark" @change="toggleDark()" />
+            </div>
+          </div>
           <div class="setting-group">
             <h4>Background Effects</h4>
             <div class="setting-item">
@@ -54,6 +64,7 @@ const { settings, accentColors, setAccentColor } = useSettings();
 </template>
 
 <style scoped>
+/* Style tidak berubah, gunakan yang sudah ada */
 .palette-container {
   position: fixed; top: 0; left: 0; width: 100%; height: 100%;
   background: rgba(0, 0, 0, 0.5);

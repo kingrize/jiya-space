@@ -1,5 +1,5 @@
 // File: src/main.js
-// Versi lengkap dengan semua ikon dan directive terdaftar.
+// (DIPERBARUI) Memastikan semua ikon yang diperlukan terdaftar.
 
 import { createApp } from 'vue';
 import { createHead } from '@vueuse/head';

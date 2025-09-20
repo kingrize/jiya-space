@@ -1,5 +1,5 @@
 <!-- File: src/App.vue -->
-<!-- (LENGKAP) Mengintegrasikan panel pengaturan dan menerapkan settings secara global. -->
+<!-- (DIPERBARUI) Menambahkan event listener ke <app-header>. -->
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watchEffect } from 'vue';
 import { useHead } from '@vueuse/head';
@@ -8,6 +8,7 @@ import AppHeader from './components/layout/Header.vue';
 import AppFooter from './components/layout/Footer.vue';
 import CommandPalette from './components/ui/CommandPalette.vue';
 import SettingsPanel from './components/ui/SettingsPanel.vue';
+import NotificationToast from './components/ui/NotificationToast.vue';
 import { useSettings } from './composables/useSettings';
 
 const route = useRoute();
@@ -40,7 +41,8 @@ useHead(computed(() => ({
 
 <template>
   <div class="app-wrapper">
-    <app-header />
+    <!-- PERBAIKAN: Menambahkan listener @open-settings -->
+    <app-header @open-settings="isSettingsPanelOpen = true" />
     <main>
       <router-view v-slot="{ Component }">
         <Transition name="fade" mode="out-in">
@@ -48,28 +50,21 @@ useHead(computed(() => ({
         </Transition>
       </router-view>
     </main>
-    <app-footer @open-settings="isSettingsPanelOpen = true" />
+    <app-footer />
     
     <CommandPalette :is-open="isCommandPaletteOpen" @close="isCommandPaletteOpen = false" />
     <SettingsPanel :is-open="isSettingsPanelOpen" @close="isSettingsPanelOpen = false" />
+    <NotificationToast />
   </div>
 </template>
 
 <style>
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+/* Style tidak berubah */
+* { box-sizing: border-box; margin: 0; padding: 0; }
 main {
-  padding: 2rem;
-  max-width: 960px;
-  margin: 0 auto;
+  padding: 2rem; max-width: 960px; margin: 0 auto;
   min-height: calc(100vh - 150px);
 }
-.app-wrapper {
-  position: relative;
-  z-index: 1;
-}
+.app-wrapper { position: relative; z-index: 1; }
 </style>
 
