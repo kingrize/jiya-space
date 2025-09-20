@@ -1,5 +1,5 @@
 <!-- File: src/components/layout/MobileNav.vue -->
-<!-- (Tidak ada perubahan, disediakan untuk memastikan konsistensi) -->
+<!-- (LENGKAP) Menambahkan tautan "Sky Clock" ke menu seluler. -->
 <script setup>
 defineProps({
   isOpen: {
@@ -25,6 +25,7 @@ const openSettings = () => {
         <li><router-link to="/" @click="emit('close')"><v-icon name="co-home" /><div class="link-text"><span class="en">Home</span><span class="jp">ホーム</span></div></router-link></li>
         <li><router-link to="/projects" @click="emit('close')"><v-icon name="co-folder" /><div class="link-text"><span class="en">Projects</span><span class="jp">プロジェクト</span></div></router-link></li>
         <li><router-link to="/mods" @click="emit('close')"><v-icon name="io-game-controller" /><div class="link-text"><span class="en">Mods</span><span class="jp">改造</span></div></router-link></li>
+        <li><router-link to="/sky-clock" @click="emit('close')"><v-icon name="fa-star" /><div class="link-text"><span class="en">Sky Clock</span><span class="jp">空の時計</span></div></router-link></li>
         <li><router-link to="/about" @click="emit('close')"><v-icon name="co-user" /><div class="link-text"><span class="en">About</span><span class="jp">私について</span></div></router-link></li>
       </ul>
     </nav>
@@ -38,7 +39,6 @@ const openSettings = () => {
 </template>
 
 <style scoped>
-/* Style tidak berubah */
 .mobile-nav-overlay {
   position: fixed; top: 0; left: 0; width: 100%; height: 100%;
   background-color: rgba(0, 0, 0, 0.3); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);

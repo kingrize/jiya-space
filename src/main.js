@@ -1,5 +1,5 @@
 // File: src/main.js
-// (DIPERBARUI) Memastikan semua ikon yang diperlukan terdaftar.
+// (LENGKAP) Versi penuh dengan semua ikon terdaftar.
 
 import { createApp } from 'vue';
 import { createHead } from '@vueuse/head';
@@ -13,7 +13,7 @@ import {
   HiExternalLink, CoFolder, CoUser, CoHome, CoSearch,
   MdDownload, FaTag, FaAndroid, FaShieldAlt, FaCheckCircle,
   FaExclamationTriangle, FaTimes, FaHistory, IoGameController,
-  FaInfoCircle, FaTimesCircle, CoCog
+  FaInfoCircle, FaTimesCircle, CoCog, FaStar
 } from "oh-vue-icons/icons";
 
 addIcons(
@@ -21,7 +21,7 @@ addIcons(
   HiExternalLink, CoFolder, CoUser, CoHome, CoSearch,
   MdDownload, FaTag, FaAndroid, FaShieldAlt, FaCheckCircle,
   FaExclamationTriangle, FaTimes, FaHistory, IoGameController,
-  FaInfoCircle, FaTimesCircle, CoCog
+  FaInfoCircle, FaTimesCircle, CoCog, FaStar
 );
 
 import './assets/main.css';
