@@ -1,5 +1,5 @@
 <!-- File: src/App.vue -->
-<!-- (DIPERBARUI) Menambahkan event listener ke <app-header>. -->
+<!-- (DIPERBARUI) Mengelola logika untuk menampilkan Boot Screen. -->
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watchEffect } from 'vue';
 import { useHead } from '@vueuse/head';
@@ -9,12 +9,21 @@ import AppFooter from './components/layout/Footer.vue';
 import CommandPalette from './components/ui/CommandPalette.vue';
 import SettingsPanel from './components/ui/SettingsPanel.vue';
 import NotificationToast from './components/ui/NotificationToast.vue';
+import BootScreen from './components/ui/BootScreen.vue'; // <-- Impor baru
 import { useSettings } from './composables/useSettings';
+
+const isLoading = ref(true); // <-- State baru untuk mengontrol pemuatan
+
+onMounted(() => {
+  // Simulasikan waktu "booting" selama 2.5 detik
+  setTimeout(() => {
+    isLoading.value = false;
+  }, 2500);
+});
 
 const route = useRoute();
 const isCommandPaletteOpen = ref(false);
 const isSettingsPanelOpen = ref(false);
-
 const { settings } = useSettings();
 
 watchEffect(() => {
@@ -40,8 +49,13 @@ useHead(computed(() => ({
 </script>
 
 <template>
-  <div class="app-wrapper">
-    <!-- PERBAIKAN: Menambahkan listener @open-settings -->
+  <!-- Transisi untuk Boot Screen -->
+  <Transition name="boot-fade">
+    <BootScreen v-if="isLoading" />
+  </Transition>
+
+  <!-- Tampilkan aplikasi utama setelah loading selesai -->
+  <div v-if="!isLoading" class="app-wrapper">
     <app-header @open-settings="isSettingsPanelOpen = true" />
     <main>
       <router-view v-slot="{ Component }">
@@ -59,12 +73,20 @@ useHead(computed(() => ({
 </template>
 
 <style>
-/* Style tidak berubah */
-* { box-sizing: border-box; margin: 0; padding: 0; }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 main {
-  padding: 2rem; max-width: 960px; margin: 0 auto;
+  padding: 2rem;
+  max-width: 960px;
+  margin: 0 auto;
   min-height: calc(100vh - 150px);
 }
-.app-wrapper { position: relative; z-index: 1; }
+.app-wrapper {
+  position: relative;
+  z-index: 1;
+}
 </style>
 
