@@ -1,23 +1,22 @@
 // File: src/composables/useEvents.js
-// (DIPERBARUI) Menggabungkan kembali data dan logika akurat untuk memperbaiki bug impor.
+// (DIPERBARUI) Menghapus event yang sudah tidak ada sesuai permintaan.
 
 import { ref, onMounted, onUnmounted, computed } from 'vue';
 
-// PERBAIKAN: Data event sekarang berada langsung di dalam file ini,
-// diadaptasi dari file SkyClockPage.vue Anda.
+// PERBAIKAN: Hanya event yang relevan yang disimpan.
 const eventData = [
   { 
     id: 'geyser', 
     name: 'Geyser', 
-    period: 120, // dalam menit
-    offset: 5,   // dalam menit
-    duration: 10,// dalam menit
+    period: 120,
+    offset: 5,
+    duration: 10,
     color: '#3498db',
     icon: 'wi-hot'
   },
   { 
     id: 'grandma', 
-    name: "Grandma's Dinner", 
+    name: "Grandma", 
     period: 120, 
     offset: 35, 
     duration: 10, 
@@ -32,24 +31,6 @@ const eventData = [
     duration: 10, 
     color: '#2ecc71',
     icon: 'gi-turtle'
-  },
-  { 
-    id: 'sanctuary', 
-    name: 'Sanctuary Geyser', 
-    period: 120, 
-    offset: 0, 
-    duration: 15, 
-    color: '#8e44ad',
-    icon: 'fa-water'
-  },
-  { 
-    id: 'brooks', 
-    name: 'Wind Paths Race', 
-    period: 120, 
-    offset: 30, 
-    duration: 15, 
-    color: '#1abc9c',
-    icon: 'fa-wind'
   },
 ];
 
