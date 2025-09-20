@@ -1,5 +1,5 @@
 <!-- File: src/App.vue -->
-<!-- (DIPERBARUI) Mengelola logika untuk menampilkan Boot Screen. -->
+<!-- (DIPERBARUI) Menambahkan logika untuk menyembunyikan header/footer di halaman Linktree. -->
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watchEffect } from 'vue';
 import { useHead } from '@vueuse/head';
@@ -9,13 +9,12 @@ import AppFooter from './components/layout/Footer.vue';
 import CommandPalette from './components/ui/CommandPalette.vue';
 import SettingsPanel from './components/ui/SettingsPanel.vue';
 import NotificationToast from './components/ui/NotificationToast.vue';
-import BootScreen from './components/ui/BootScreen.vue'; // <-- Impor baru
+import BootScreen from './components/ui/BootScreen.vue';
 import { useSettings } from './composables/useSettings';
 
-const isLoading = ref(true); // <-- State baru untuk mengontrol pemuatan
+const isLoading = ref(true);
 
 onMounted(() => {
-  // Simulasikan waktu "booting" selama 2.5 detik
   setTimeout(() => {
     isLoading.value = false;
   }, 2500);
@@ -49,22 +48,24 @@ useHead(computed(() => ({
 </script>
 
 <template>
-  <!-- Transisi untuk Boot Screen -->
   <Transition name="boot-fade">
     <BootScreen v-if="isLoading" />
   </Transition>
 
-  <!-- Tampilkan aplikasi utama setelah loading selesai -->
   <div v-if="!isLoading" class="app-wrapper">
-    <app-header @open-settings="isSettingsPanelOpen = true" />
-    <main>
+    <!-- Header dan Footer sekarang ditampilkan secara kondisional -->
+    <app-header v-if="route.meta.layout !== 'clean'" @open-settings="isSettingsPanelOpen = true" />
+    
+    <!-- Padding pada <main> juga disesuaikan -->
+    <main :class="{ 'clean-layout': route.meta.layout === 'clean' }">
       <router-view v-slot="{ Component }">
         <Transition name="fade" mode="out-in">
           <component :is="Component" />
         </Transition>
       </router-view>
     </main>
-    <app-footer />
+    
+    <app-footer v-if="route.meta.layout !== 'clean'" />
     
     <CommandPalette :is-open="isCommandPaletteOpen" @close="isCommandPaletteOpen = false" />
     <SettingsPanel :is-open="isSettingsPanelOpen" @close="isSettingsPanelOpen = false" />
@@ -83,6 +84,12 @@ main {
   max-width: 960px;
   margin: 0 auto;
   min-height: calc(100vh - 150px);
+}
+/* Style baru untuk layout bersih tanpa padding */
+main.clean-layout {
+  padding: 0;
+  max-width: 100%;
+  min-height: 100vh;
 }
 .app-wrapper {
   position: relative;
