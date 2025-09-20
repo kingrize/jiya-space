@@ -1,5 +1,5 @@
 <!-- File: src/components/ui/BootScreen.vue -->
-<!-- (DIPERBARUI) Mengganti ASCII art dengan gambar GIF. -->
+<!-- (DIPERBARUI) Memperbaiki rasio aspek GIF. -->
 <script setup>
 // Impor file GIF Anda dari folder assets
 import loadingGif from '../../assets/images/loading.gif';
@@ -37,9 +37,10 @@ import loadingGif from '../../assets/images/loading.gif';
 
 /* Style baru untuk GIF */
 .boot-gif {
-  width: 150px; /* Anda bisa sesuaikan ukurannya */
-  height: 150px;
+  width: 180px; /* Anda bisa sesuaikan ukurannya */
+  height: auto; /* PERBAIKAN: Membiarkan tinggi menyesuaikan secara otomatis */
   margin-bottom: 2rem;
+  object-fit: contain; /* Memastikan gambar pas tanpa terdistorsi */
 }
 
 .boot-text {
