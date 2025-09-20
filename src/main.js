@@ -1,5 +1,5 @@
 // File: src/main.js
-// (DIPERBARUI) Mendaftarkan ikon baru untuk Command Palette.
+// (LENGKAP) Versi final setelah semua ikon ditambahkan.
 
 import { createApp } from 'vue';
 import { createHead } from '@vueuse/head';
@@ -12,16 +12,17 @@ import {
   FaSun, FaMoon, CoGithub, CoInstagram, CoFacebook, FaGhost,
   HiExternalLink, CoFolder, CoUser, CoHome, CoSearch,
   MdDownload, FaTag, FaAndroid, FaShieldAlt, FaCheckCircle,
-  FaExclamationTriangle, FaTimes, FaHistory // <-- Ikon baru
+  FaExclamationTriangle, FaTimes, FaHistory, IoGameController,
+  FaInfoCircle, FaTimesCircle
 } from "oh-vue-icons/icons";
 
 addIcons(
   FaSun, FaMoon, CoGithub, CoInstagram, CoFacebook, FaGhost,
   HiExternalLink, CoFolder, CoUser, CoHome, CoSearch,
   MdDownload, FaTag, FaAndroid, FaShieldAlt, FaCheckCircle,
-  FaExclamationTriangle, FaTimes, FaHistory // <-- Ikon baru
+  FaExclamationTriangle, FaTimes, FaHistory, IoGameController,
+  FaInfoCircle, FaTimesCircle
 );
-
 
 import './assets/main.css';
 
