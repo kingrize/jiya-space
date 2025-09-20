@@ -1,5 +1,5 @@
 <!-- File: src/components/ui/SkyEventCard.vue -->
-<!-- (DIPERBARUI) Dirombak total dengan desain "System Process" yang lebih dinamis. -->
+<!-- (DIPERBARUI) Dirombak total dengan desain "System Process" yang baru. -->
 <script setup>
 const props = defineProps({
   event: Object,
@@ -7,18 +7,18 @@ const props = defineProps({
 </script>
 
 <template>
-  <div class="process-card" :class="{ active: event.status === 'Active' }">
-    <div class="window-header">
-      <span>process_id: {{ event.id }}</span>
+  <div class="process-card" :class="{ active: event.status === 'Active' }" :style="{'--event-color': event.color}">
+    <div class="card-background-icon">
+      <v-icon :name="event.icon" scale="5" />
     </div>
-    <div class="card-body">
-      <div class="status-indicator" :style="{ backgroundColor: event.color }">
-        {{ event.status }}
+    <div class="card-content">
+      <div class="header">
+        <h4 class="title">{{ event.name }}</h4>
+        <span class="status">{{ event.status }}</span>
       </div>
-      <h3 class="title">{{ event.name }}</h3>
-      <p class="countdown">{{ event.countdown }}</p>
+      <div class="countdown">{{ event.countdown }}</div>
       <div class="progress-bar-container">
-        <div class="progress-bar" :style="{ width: `${event.progress}%`, backgroundColor: event.color }"></div>
+        <div class="progress-bar" :style="{ width: `${event.progress}%` }"></div>
       </div>
     </div>
   </div>
@@ -31,6 +31,8 @@ const props = defineProps({
   -webkit-backdrop-filter: blur(25px);
   border: 1px solid rgba(var(--border-color-rgb), 0.1);
   border-radius: 16px;
+  padding: 1.5rem;
+  position: relative;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -39,48 +41,51 @@ const props = defineProps({
 .process-card:hover {
   transform: translateY(-8px) scale(1.02);
   box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-}
-:root.dark .process-card:hover {
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  border-color: rgba(var(--border-color-rgb), 0.3);
 }
 
-.window-header {
-  background-color: rgba(var(--card-bg-rgb), 0.3);
-  padding: 0.5rem 1rem;
-  border-bottom: 1px solid rgba(var(--border-color-rgb), 0.1);
-  color: var(--text-color-secondary);
-  font-family: 'Fira Code', monospace;
-  font-size: 0.8rem;
+.card-background-icon {
+  position: absolute;
+  bottom: -20px;
+  right: -20px;
+  font-size: 100px;
+  color: var(--event-color);
+  opacity: 0.05;
+  transition: transform 0.4s ease;
+}
+.process-card:hover .card-background-icon {
+  transform: scale(1.2) rotate(-15deg);
 }
 
-.card-body {
-  padding: 1.5rem;
-  text-align: center;
-  flex-grow: 1;
+.card-content {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  flex-grow: 1;
 }
 
-.status-indicator {
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: white;
-  background-color: var(--text-color-secondary);
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  text-transform: uppercase;
-  margin-bottom: 1rem;
-}
-.process-card.active .status-indicator {
-  background-color: var(--event-color);
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.5rem;
 }
 
 .title {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 600;
-  margin-bottom: 0.5rem;
+  color: var(--text-color-primary);
+}
+
+.status {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-color-secondary);
+  text-transform: uppercase;
+}
+.process-card.active .status {
+  color: var(--event-color);
 }
 
 .countdown {
@@ -88,12 +93,12 @@ const props = defineProps({
   font-weight: 500;
   font-family: 'Fira Code', monospace;
   color: var(--text-color-primary);
-  margin-bottom: 1.5rem;
+  margin-bottom: auto; /* Mendorong progress bar ke bawah */
+  padding: 1rem 0;
 }
 
 .progress-bar-container {
   width: 100%;
-  max-width: 200px;
   height: 8px;
   background-color: rgba(var(--border-color-rgb), 0.3);
   border-radius: 4px;

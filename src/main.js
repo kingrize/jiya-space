@@ -13,7 +13,7 @@ import {
   HiExternalLink, CoFolder, CoUser, CoHome, CoSearch,
   MdDownload, FaTag, FaAndroid, FaShieldAlt, FaCheckCircle,
   FaExclamationTriangle, FaTimes, FaHistory, IoGameController,
-  FaInfoCircle, FaTimesCircle, CoCog, FaStar
+  FaInfoCircle, FaTimesCircle, CoCog, FaStar, WiHot, FaUtensils, GiTurtle, FaWater, FaWind
 } from "oh-vue-icons/icons";
 
 addIcons(
@@ -21,8 +21,9 @@ addIcons(
   HiExternalLink, CoFolder, CoUser, CoHome, CoSearch,
   MdDownload, FaTag, FaAndroid, FaShieldAlt, FaCheckCircle,
   FaExclamationTriangle, FaTimes, FaHistory, IoGameController,
-  FaInfoCircle, FaTimesCircle, CoCog, FaStar
+  FaInfoCircle, FaTimesCircle, CoCog, FaStar,  WiHot, FaUtensils, GiTurtle, FaWater, FaWind
 );
+
 
 import './assets/main.css';
 

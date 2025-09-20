@@ -1,14 +1,15 @@
 // File: src/data/events.js
-// (DIPERBARUI) Menggunakan data yang lebih akurat dari file Anda.
+// (DIPERBARUI) Menambahkan properti 'icon' untuk setiap event.
 
 export const events = [
   { 
     id: 'geyser', 
     name: 'Geyser', 
-    period: 120, // dalam menit
-    offset: 5,   // dalam menit
-    duration: 10,// dalam menit
-    color: '#3498db' 
+    period: 120,
+    offset: 5,
+    duration: 10,
+    color: '#3498db',
+    icon: 'wi-hot' // <-- Ikon baru
   },
   { 
     id: 'grandma', 
@@ -16,7 +17,8 @@ export const events = [
     period: 120, 
     offset: 35, 
     duration: 10, 
-    color: '#e67e22' 
+    color: '#e67e22',
+    icon: 'fa-utensils' // <-- Ikon baru
   },
   { 
     id: 'turtle', 
@@ -24,17 +26,26 @@ export const events = [
     period: 120, 
     offset: 50, 
     duration: 10, 
-    color: '#2ecc71' 
+    color: '#2ecc71',
+    icon: 'gi-turtle' // <-- Ikon baru
   },
-  // Contoh event harian dari file Anda
-  // {
-  //   id: 'skater',
-  //   name: 'Dreams Skater',
-  //   period: 120,
-  //   offset: 60,
-  //   duration: 10,
-  //   days: [5, 6, 0], // Jumat, Sabtu, Minggu (0 adalah Minggu di JS)
-  //   color: '#9b59b6',
-  // },
+  { 
+    id: 'sanctuary', 
+    name: 'Sanctuary Geyser', 
+    period: 120, 
+    offset: 0, 
+    duration: 15, 
+    color: '#8e44ad',
+    icon: 'fa-water' // <-- Ikon baru
+  },
+  { 
+    id: 'brooks', 
+    name: 'Wind Paths Race', 
+    period: 120, 
+    offset: 30, 
+    duration: 15, 
+    color: '#1abc9c',
+    icon: 'fa-wind' // <-- Ikon baru
+  },
 ];
 

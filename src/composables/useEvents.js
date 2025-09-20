@@ -1,9 +1,10 @@
 // File: src/composables/useEvents.js
-// (DIPERBARUI) Logika dikembalikan ke versi akurat untuk tata letak kartu.
+// (DIPERBARUI) Menggabungkan kembali data dan logika akurat untuk memperbaiki bug impor.
 
 import { ref, onMounted, onUnmounted, computed } from 'vue';
 
-// Data event diadaptasi dari file SkyClockPage.vue Anda
+// PERBAIKAN: Data event sekarang berada langsung di dalam file ini,
+// diadaptasi dari file SkyClockPage.vue Anda.
 const eventData = [
   { 
     id: 'geyser', 
@@ -11,7 +12,8 @@ const eventData = [
     period: 120, // dalam menit
     offset: 5,   // dalam menit
     duration: 10,// dalam menit
-    color: '#3498db' 
+    color: '#3498db',
+    icon: 'wi-hot'
   },
   { 
     id: 'grandma', 
@@ -19,7 +21,8 @@ const eventData = [
     period: 120, 
     offset: 35, 
     duration: 10, 
-    color: '#e67e22' 
+    color: '#e67e22',
+    icon: 'fa-utensils'
   },
   { 
     id: 'turtle', 
@@ -27,7 +30,8 @@ const eventData = [
     period: 120, 
     offset: 50, 
     duration: 10, 
-    color: '#2ecc71' 
+    color: '#2ecc71',
+    icon: 'gi-turtle'
   },
   { 
     id: 'sanctuary', 
@@ -35,7 +39,8 @@ const eventData = [
     period: 120, 
     offset: 0, 
     duration: 15, 
-    color: '#8e44ad' 
+    color: '#8e44ad',
+    icon: 'fa-water'
   },
   { 
     id: 'brooks', 
@@ -43,7 +48,8 @@ const eventData = [
     period: 120, 
     offset: 30, 
     duration: 15, 
-    color: '#1abc9c' 
+    color: '#1abc9c',
+    icon: 'fa-wind'
   },
 ];
 
@@ -99,14 +105,12 @@ export function useEvents() {
         } else {
           status = 'Upcoming';
           countdown = formatTime(secondsUntilNext);
-          const minutesSinceEnd = minutesIntoCurrentCycle;
-          progress = (minutesSinceEnd / (totalMinutesInCycle - event.duration)) * 100;
+          progress = 0;
         }
 
         return { ...event, status, countdown, progress };
       })
       .sort((a, b) => {
-        // Urutkan yang aktif ke atas, lalu berdasarkan waktu terdekat
         if (a.status === 'Active' && b.status !== 'Active') return -1;
         if (a.status !== 'Active' && b.status === 'Active') return 1;
         return a.countdown.localeCompare(b.countdown);
