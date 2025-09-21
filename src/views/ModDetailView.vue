@@ -1,20 +1,22 @@
 <!-- File: src/views/ModDetailView.vue -->
-<!-- (DIPERBARUI) Menghapus modal dan menggantinya dengan trigger notifikasi toast. -->
+<!-- (DIPERBARUI) Mendesain ulang total tombol accordion agar terlihat seperti tombol yang jelas. -->
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { mods } from '../data/mods.js';
-import { useNotifications } from '../composables/useNotifications.js'; // <-- Impor sistem notifikasi
+import { useNotifications } from '../composables/useNotifications.js';
 
 const route = useRoute();
 const router = useRouter();
-const { showNotification } = useNotifications(); // <-- Gunakan sistem notifikasi
+const { showNotification } = useNotifications();
 
 const mod = computed(() => mods.find(m => m.slug === route.params.slug));
 
 if (!mod.value) {
   router.replace('/404');
 }
+
+const isVersionHistoryOpen = ref(false);
 
 onMounted(() => {
   const isRisky = mod.value.category === 'Game Mod' || mod.value.category === 'Script';
@@ -23,16 +25,17 @@ onMounted(() => {
       type: 'warning',
       title: 'Risk Warning',
       message: 'Using mods or scripts can result in an account ban. Please proceed at your own risk.',
+      duration: 10000
     });
   }
 });
 
-const formattedDate = computed(() => {
-  if (!mod.value?.lastUpdated) return '';
-  return new Date(mod.value.lastUpdated).toLocaleDateString('en-US', {
+const formattedDate = (dateString) => {
+  if (!dateString) return '';
+  return new Date(dateString).toLocaleDateString('en-US', {
     year: 'numeric', month: 'long', day: 'numeric'
   });
-});
+};
 
 const isDownloading = ref(false);
 const countdown = ref(3);
@@ -119,16 +122,35 @@ onUnmounted(() => {
               </div>
               <div class="info-item">
                 <span class="label"><v-icon name="fa-history" /> Updated</span>
-                <span class="value">{{ formattedDate }}</span>
+                <span class="value">{{ formattedDate(mod.lastUpdated) }}</span>
               </div>
               <div class="info-item">
                 <span class="label"><v-icon name="md-download" /> Downloads</span>
                 <span class="value">{{ mod.downloads.toLocaleString() }}</span>
               </div>
             </div>
+            
+            <div v-if="mod.olderVersions && mod.olderVersions.length > 0" class="version-history-section">
+              <button class="version-history-toggle" @click="isVersionHistoryOpen = !isVersionHistoryOpen">
+                <h4>Older Versions</h4>
+                <v-icon name="fa-chevron-down" class="toggle-icon" :class="{ rotated: isVersionHistoryOpen }" />
+              </button>
+              <Transition name="slide-fade">
+                <div v-if="isVersionHistoryOpen" class="version-history-list">
+                  <div class="version-item" v-for="version in mod.olderVersions" :key="version.version">
+                    <span class="version-number">v{{ version.version }}</span>
+                    <span class="version-date">{{ formattedDate(version.date) }}</span>
+                    <a :href="version.url" class="version-download" target="_blank" rel="noopener noreferrer" aria-label="Download this version">
+                      <v-icon name="md-download" />
+                    </a>
+                  </div>
+                </div>
+              </Transition>
+            </div>
+
             <div class="info-footer">
               <button @click="startDownload" class="download-button" :disabled="isDownloading">
-                <span v-if="!isDownloading">Download</span>
+                <span v-if="!isDownloading">Download Current (v{{ mod.version }})</span>
                 <span v-else>Starting in {{ countdown }}...</span>
               </button>
             </div>
@@ -140,15 +162,8 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-.mod-detail-card {
-  background: rgba(var(--card-bg-rgb), 0.4);
-  backdrop-filter: blur(25px);
-  -webkit-backdrop-filter: blur(25px);
-  border: 1px solid rgba(var(--border-color-rgb), 0.1);
-  border-radius: 16px;
-  overflow: hidden;
-  margin: 2rem auto;
-}
+/* Style tidak berubah, gunakan yang sudah ada */
+.mod-detail-card { background: rgba(var(--card-bg-rgb), 0.4); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border: 1px solid rgba(var(--border-color-rgb), 0.1); border-radius: 16px; overflow: hidden; margin: 2rem auto; }
 .card-header { position: relative; height: 300px; }
 .header-image { width: 100%; height: 100%; object-fit: cover; }
 .header-overlay { position: absolute; bottom: 0; left: 0; width: 100%; padding: 2rem; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); color: white; }
@@ -201,19 +216,98 @@ onUnmounted(() => {
 .download-button:hover:not(:disabled) { transform: scale(1.05); }
 .download-button:disabled { background-color: var(--text-color-secondary); cursor: not-allowed; }
 
+/* PERUBAHAN: Didesain ulang agar terlihat seperti tombol yang jelas */
+.version-history-section {
+  border-top: 1px solid rgba(var(--border-color-rgb), 0.1);
+  padding: 1rem;
+}
+.version-history-toggle {
+  background-color: rgba(var(--border-color-rgb), 0.1);
+  border: 1px solid rgba(var(--border-color-rgb), 0.2);
+  color: var(--text-color-primary);
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 1rem;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+.version-history-toggle:hover {
+  background-color: rgba(var(--border-color-rgb), 0.2);
+  border-color: rgba(var(--border-color-rgb), 0.3);
+}
+.version-history-toggle h4 {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-color-secondary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.toggle-icon {
+  transition: transform 0.3s ease;
+  color: var(--text-color-secondary);
+}
+.toggle-icon.rotated {
+  transform: rotate(180deg);
+}
+
+.version-history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  overflow: hidden;
+  padding: 1rem 0 0; /* Padding di atas saat terbuka */
+}
+.version-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(var(--border-color-rgb), 0.05);
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+.version-number {
+  font-family: 'Fira Code', monospace;
+  font-weight: 500;
+}
+.version-date {
+  font-size: 0.8rem;
+  color: var(--text-color-secondary);
+}
+.version-download {
+  color: var(--text-color-secondary);
+  transition: color 0.2s;
+}
+.version-download:hover {
+  color: var(--accent-color);
+}
+
+/* Transisi untuk accordion */
+.slide-fade-enter-active {
+  transition: all 0.3s ease-out;
+}
+.slide-fade-leave-active {
+  transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
+}
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateY(-10px);
+  opacity: 0;
+}
+
+
 @media (max-width: 960px) {
   .card-body {
     grid-template-columns: 1fr;
-    grid-template-areas:
-      "main"
-      "sidebar";
+    grid-template-areas: "main" "sidebar";
   }
-  .sidebar {
-    width: 100%;
-  }
-  .info-box {
-    position: static;
-  }
+  .sidebar { width: 100%; }
+  .info-box { position: static; }
 }
 </style>
 

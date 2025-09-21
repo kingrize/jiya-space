@@ -1,5 +1,5 @@
 // File: src/composables/useSettings.js
-// (FILE BARU) Otak dari sistem pengaturan global kita.
+// (DIPERBARUI) Menambahkan pengaturan baru untuk jejak mouse.
 
 import { useStorage } from '@vueuse/core';
 
@@ -7,6 +7,7 @@ const settings = useStorage('jiyaos-settings', {
   showBlobs: true,
   showGrid: true,
   accentColor: '#007AFF',
+  enableMouseTrail: false, // <-- Fitur baru, mati secara default
 });
 
 const accentColors = [

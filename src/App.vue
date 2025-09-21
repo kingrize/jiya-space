@@ -1,5 +1,5 @@
 <!-- File: src/App.vue -->
-<!-- (DIPERBARUI) Menambahkan logika untuk menyembunyikan header/footer di halaman Linktree. -->
+<!-- (DIPERBARUI) Mengaktifkan logika jejak partikel mouse secara global. -->
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watchEffect } from 'vue';
 import { useHead } from '@vueuse/head';
@@ -11,14 +11,13 @@ import SettingsPanel from './components/ui/SettingsPanel.vue';
 import NotificationToast from './components/ui/NotificationToast.vue';
 import BootScreen from './components/ui/BootScreen.vue';
 import { useSettings } from './composables/useSettings';
+import { useMouseTrail } from './composables/useMouseTrail'; // <-- Impor baru
 
 const isLoading = ref(true);
+onMounted(() => { setTimeout(() => { isLoading.value = false; }, 2500); });
 
-onMounted(() => {
-  setTimeout(() => {
-    isLoading.value = false;
-  }, 2500);
-});
+// Aktifkan logika jejak mouse
+useMouseTrail();
 
 const route = useRoute();
 const isCommandPaletteOpen = ref(false);
@@ -53,19 +52,15 @@ useHead(computed(() => ({
   </Transition>
 
   <div v-if="!isLoading" class="app-wrapper">
-    <!-- Header dan Footer sekarang ditampilkan secara kondisional -->
-    <app-header v-if="route.meta.layout !== 'clean'" @open-settings="isSettingsPanelOpen = true" />
-    
-    <!-- Padding pada <main> juga disesuaikan -->
-    <main :class="{ 'clean-layout': route.meta.layout === 'clean' }">
+    <app-header @open-settings="isSettingsPanelOpen = true" />
+    <main>
       <router-view v-slot="{ Component }">
         <Transition name="fade" mode="out-in">
           <component :is="Component" />
         </Transition>
       </router-view>
     </main>
-    
-    <app-footer v-if="route.meta.layout !== 'clean'" />
+    <app-footer />
     
     <CommandPalette :is-open="isCommandPaletteOpen" @close="isCommandPaletteOpen = false" />
     <SettingsPanel :is-open="isSettingsPanelOpen" @close="isSettingsPanelOpen = false" />

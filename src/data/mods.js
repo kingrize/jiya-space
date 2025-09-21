@@ -1,5 +1,5 @@
 // File: src/data/mods.js
-// (DIPERBARUI) Menambahkan tanggal pembaruan dan jumlah unduhan.
+// (DIPERBARUI) Menambahkan riwayat versi lama ('olderVersions').
 
 export const mods = [
   {
@@ -18,8 +18,13 @@ export const mods = [
     gallery: [ 'https://placehold.co/600x300/e2ece9/333?text=Screenshot+1', 'https://placehold.co/600x300/fddde6/333?text=Screenshot+2' ],
     downloadUrl: '#',
     instructions: '1. Download the file.\n2. Unzip the package.\n3. Place the .package file into your The Sims 4/Mods folder.',
-    lastUpdated: '2025-09-18', // <-- Properti baru
-    downloads: 12530 // <-- Properti baru
+    lastUpdated: '2025-09-18',
+    downloads: 12530,
+    // <-- Properti baru untuk versi lama
+    olderVersions: [
+      { version: '2.0.0', date: '2025-08-15', url: '#' },
+      { version: '1.5.0', date: '2025-07-21', url: '#' },
+    ]
   },
   {
     id: 2,
@@ -36,8 +41,12 @@ export const mods = [
     gallery: [],
     downloadUrl: '#',
     instructions: '1. Uninstall official Spotify app.\n2. Download and install the provided APK.\n3. Login with your account.',
-    lastUpdated: '2025-09-15', // <-- Properti baru
-    downloads: 48201 // <-- Properti baru
+    lastUpdated: '2025-09-15',
+    downloads: 48201,
+    olderVersions: [
+      { version: '8.9.0', date: '2025-09-01', url: '#' },
+      { version: '8.8.5', date: '2025-08-12', url: '#' },
+    ]
   },
   {
     id: 3,
@@ -54,8 +63,9 @@ export const mods = [
     gallery: [],
     downloadUrl: '#',
     instructions: '1. Make sure Game Guardian is installed on a rooted device.\n2. Run the script from within Game Guardian while the target game is active.',
-    lastUpdated: '2025-08-29', // <-- Properti baru
-    downloads: 9875 // <-- Properti baru
+    lastUpdated: '2025-08-29',
+    downloads: 9875,
+    olderVersions: [] // Contoh mod tanpa versi lama
   }
 ];
 
