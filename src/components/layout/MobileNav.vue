@@ -19,7 +19,7 @@ const openSettings = () => {
 <template>
   <div class="mobile-nav-overlay" :class="{ 'is-open': isOpen }" @click="emit('close')"></div>
   <aside class="mobile-nav-panel" :class="{ 'is-open': isOpen }">
-    <div class="panel-header"><span class="panel-title">JiyaOS // ジヤOS</span></div>
+    <div class="panel-header"><span class="panel-title">JiyaOS ❤</span></div>
     <nav class="main-nav">
       <ul>
         <li><router-link to="/" @click="emit('close')"><v-icon name="co-home" /><div class="link-text"><span class="en">Home</span><span class="jp">ホーム</span></div></router-link></li>
