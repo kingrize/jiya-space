@@ -1,5 +1,5 @@
 <!-- File: src/views/ModsView.vue -->
-<!-- (DIPERBARUI) Menambahkan UI dan logika untuk sistem filter. -->
+<!-- (DIPERBARUI) Dirombak total dengan filter "Tabs" dan layout yang disempurnakan. -->
 <script setup>
 import { ref, computed } from 'vue';
 import ModCard from '../components/ui/ModCard.vue';
@@ -23,19 +23,18 @@ const filteredMods = computed(() => {
       <p class="page-subtitle">Welcome to the central repository for all my game modifications.</p>
     </div>
 
-    <!-- Filter Buttons -->
-    <div class="filter-container">
+    <!-- Filter "Tabs" Baru -->
+    <div class="filter-tabs" v-animate-on-scroll>
       <button 
         v-for="category in categories" 
         :key="category"
         :class="{ active: activeFilter === category }"
         @click="activeFilter = category"
       >
-        {{ category }}
+        <span>{{ category }}</span>
       </button>
     </div>
     
-    <!-- Animated Grid -->
     <TransitionGroup name="list" tag="div" class="mods-grid">
       <ModCard 
         v-for="(mod, index) in filteredMods" 
@@ -56,42 +55,51 @@ const filteredMods = computed(() => {
 .page-title { font-size: 2.5rem; font-weight: 700; }
 .page-subtitle { color: var(--text-color-secondary); font-size: 1.1rem; margin-top: 0.5rem; }
 
-/* Filter Container */
-.filter-container {
+/* Filter "Tabs" Baru */
+.filter-tabs {
   display: flex;
   justify-content: center;
-  gap: 1rem;
   margin-bottom: 3rem;
-  flex-wrap: wrap;
+  border-bottom: 1px solid rgba(var(--border-color-rgb), 0.2);
 }
-.filter-container button {
-  background: rgba(var(--card-bg-rgb), 0.4);
-  border: 1px solid rgba(var(--border-color-rgb), 0.1);
+.filter-tabs button {
+  background: transparent;
+  border: none;
   color: var(--text-color-secondary);
-  padding: 0.5rem 1.25rem;
-  border-radius: 9999px;
-  font-size: 0.9rem;
+  padding: 1rem 1.5rem;
+  font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s ease;
+  position: relative;
+  transition: color 0.3s ease;
 }
-.filter-container button:hover {
-  background: rgba(var(--border-color-rgb), 0.2);
+.filter-tabs button::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--accent-color);
+  transform: scaleX(0);
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.filter-tabs button:hover,
+.filter-tabs button.active {
   color: var(--text-color-primary);
 }
-.filter-container button.active {
-  background: var(--accent-color);
-  color: white;
-  border-color: var(--accent-color);
+.filter-tabs button.active::after {
+  transform: scaleX(1);
 }
 
 .mods-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 1.5rem;
+  position: relative; /* Diperlukan untuk transisi */
 }
 
-/* Transition for filtering */
+/* Transisi untuk pemfilteran */
 .list-move,
 .list-enter-active,
 .list-leave-active {
@@ -104,6 +112,7 @@ const filteredMods = computed(() => {
 }
 .list-leave-active {
   position: absolute;
+  z-index: -1;
 }
 </style>
 

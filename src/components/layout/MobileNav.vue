@@ -1,5 +1,5 @@
 <!-- File: src/components/layout/MobileNav.vue -->
-<!-- (LENGKAP) Menambahkan tautan "Sky Clock" ke menu seluler. -->
+<!-- (DIPERBARUI) Menghapus subtitel Jepang dari menu seluler. -->
 <script setup>
 defineProps({
   isOpen: {
@@ -19,14 +19,15 @@ const openSettings = () => {
 <template>
   <div class="mobile-nav-overlay" :class="{ 'is-open': isOpen }" @click="emit('close')"></div>
   <aside class="mobile-nav-panel" :class="{ 'is-open': isOpen }">
-    <div class="panel-header"><span class="panel-title">JiyaOS ❤</span></div>
+    <div class="panel-header"><span class="panel-title">JiyaOS</span></div>
     <nav class="main-nav">
       <ul>
-        <li><router-link to="/" @click="emit('close')"><v-icon name="co-home" /><div class="link-text"><span class="en">Home</span><span class="jp">ホーム</span></div></router-link></li>
-        <li><router-link to="/projects" @click="emit('close')"><v-icon name="co-folder" /><div class="link-text"><span class="en">Projects</span><span class="jp">プロジェクト</span></div></router-link></li>
-        <li><router-link to="/mods" @click="emit('close')"><v-icon name="io-game-controller" /><div class="link-text"><span class="en">Mods</span><span class="jp">改造</span></div></router-link></li>
-        <li><router-link to="/sky-clock" @click="emit('close')"><v-icon name="fa-star" /><div class="link-text"><span class="en">Sky Clock</span><span class="jp">空の時計</span></div></router-link></li>
-        <li><router-link to="/about" @click="emit('close')"><v-icon name="co-user" /><div class="link-text"><span class="en">About</span><span class="jp">私について</span></div></router-link></li>
+        <!-- PERUBAHAN: Tautan disederhanakan tanpa subtitel -->
+        <li><router-link to="/" @click="emit('close')"><v-icon name="co-home" /> Home</router-link></li>
+        <li><router-link to="/projects" @click="emit('close')"><v-icon name="co-folder" /> Projects</router-link></li>
+        <li><router-link to="/mods" @click="emit('close')"><v-icon name="io-game-controller" /> Mods</router-link></li>
+        <li><router-link to="/sky-clock" @click="emit('close')"><v-icon name="fa-star" /> Sky Clock</router-link></li>
+        <li><router-link to="/about" @click="emit('close')"><v-icon name="co-user" /> About</router-link></li>
       </ul>
     </nav>
     <div class="panel-footer">
@@ -39,6 +40,7 @@ const openSettings = () => {
 </template>
 
 <style scoped>
+/* Style tidak berubah, gunakan yang sudah ada */
 .mobile-nav-overlay {
   position: fixed; top: 0; left: 0; width: 100%; height: 100%;
   background-color: rgba(0, 0, 0, 0.3); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
@@ -72,9 +74,6 @@ a:hover, a.router-link-exact-active {
   background-color: rgba(var(--border-color-rgb), 0.2);
   color: var(--accent-color);
 }
-a:hover .jp, a.router-link-exact-active .jp { color: var(--accent-color); }
-.link-text { display: flex; flex-direction: column; line-height: 1.3; }
-.jp { font-size: 0.8rem; font-weight: 400; color: var(--text-color-secondary); transition: color 0.2s; }
 .panel-footer {
   padding: 1rem; border-top: 1px solid rgba(var(--border-color-rgb), 0.1);
 }
