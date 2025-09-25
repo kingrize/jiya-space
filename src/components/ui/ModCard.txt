@@ -1,0 +1,76 @@
+<!-- File: src/components/ui/ModCard.vue -->
+<!-- (DIPERBARUI) Didesain ulang menjadi ikon "file" yang bersih untuk Grid View. -->
+<script setup>
+defineProps({
+  mod: Object,
+});
+</script>
+
+<template>
+  <router-link :to="`/mods/${mod.slug}`" class="mod-card">
+    <div class="card-icon">
+      <img :src="mod.image" :alt="mod.title" class="card-image" />
+    </div>
+    <div class="card-title">
+      <p>{{ mod.title }}</p>
+      <span class="category-tag">{{ mod.category }}</span>
+    </div>
+  </router-link>
+</template>
+
+<style scoped>
+.mod-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  padding: 1rem;
+  border-radius: 12px;
+  transition: background-color 0.2s;
+}
+.mod-card:hover {
+  background-color: rgba(var(--border-color-rgb), 0.1);
+}
+
+.card-icon {
+  width: 120px;
+  height: 120px;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  flex-shrink: 0;
+}
+.card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+.mod-card:hover .card-image {
+  transform: scale(1.05);
+}
+
+.card-title {
+  text-align: center;
+  color: var(--text-color-primary);
+  font-weight: 500;
+}
+.card-title p {
+  font-size: 0.9rem;
+  /* Mencegah teks terlalu panjang */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;  
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+.category-tag {
+  font-size: 0.75rem;
+  color: var(--text-color-secondary);
+  background: rgba(var(--border-color-rgb), 0.15);
+  padding: 0.1rem 0.5rem;
+  border-radius: 6px;
+}
+</style>
+

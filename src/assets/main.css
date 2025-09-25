@@ -1,27 +1,35 @@
 /* File: src/assets/main.css */
-/* (DIPERBARUI) Menambahkan style untuk jejak partikel mouse. */
+/* Versi lengkap dari semua style global untuk aplikasi Jiya.space. */
 
 /* -- Color & Font Variables -- */
 :root {
   --accent-color: #007AFF;
-  --accent-color-rgb: 0, 122, 255; /* <-- Variabel baru */
+  --accent-color-rgb: 0, 122, 255;
   --text-color-primary: #1a1a1a;
   --text-color-secondary: #555555;
   --background-color: #f4f4f5; /* Fallback */
   --card-bg-rgb: 255, 255, 255;
   --border-color-rgb: 229, 231, 235;
   --header-bg: rgba(244, 244, 245, 0.7);
+  --warning-bg: #FFFBEB;
+  --warning-border: #FBBF24;
+  --warning-text: #B45309;
+  --warning-header: #92400E;
 }
 
 :root.dark {
   --accent-color: #007AFF;
-  --accent-color-rgb: 0, 122, 255; /* <-- Variabel baru */
+  --accent-color-rgb: 0, 122, 255;
   --text-color-primary: #f0f0f0;
   --text-color-secondary: #9ca3af;
   --background-color: #0a0a0a; /* Fallback */
   --card-bg-rgb: 10, 10, 10;
   --border-color-rgb: 55, 65, 81;
   --header-bg: rgba(10, 10, 10, 0.7);
+  --warning-bg: #4A3A1A;
+  --warning-border: #FBBF24;
+  --warning-text: #FEF3C7;
+  --warning-header: #FEF9C3;
 }
 
 /* -- Global Styles & Resets -- */
@@ -35,25 +43,42 @@ body {
 }
 
 /* -- Multi-layer Background -- */
-body::before, body::after {
-  content: ''; position: fixed; z-index: -2;
-  filter: blur(100px); will-change: transform;
+/* Layer 1: Animated Blobs (paling bawah) */
+body::before,
+body::after {
+  content: '';
+  position: fixed;
+  z-index: -2;
+  filter: blur(100px);
+  will-change: transform;
   transition: opacity 0.5s ease;
 }
-body.blobs-hidden::before, body.blobs-hidden::after { opacity: 0 !important; }
+/* Kelas utilitas untuk menyembunyikan blobs */
+body.blobs-hidden::before,
+body.blobs-hidden::after {
+  opacity: 0 !important;
+}
+
 body::before {
-  width: 40vmax; height: 40vmax; border-radius: 50%;
-  background: var(--accent-color); opacity: 0.15;
+  width: 40vmax;
+  height: 40vmax;
+  border-radius: 50%;
+  background: var(--accent-color);
+  opacity: 0.15;
   animation: blob-move-1 25s infinite alternate;
 }
 body::after {
-  width: 30vmax; height: 30vmax; border-radius: 50%;
-  background: #ff7e5f; opacity: 0.15;
+  width: 30vmax;
+  height: 30vmax;
+  border-radius: 50%;
+  background: #ff7e5f;
+  opacity: 0.15;
   animation: blob-move-2 20s infinite alternate;
 }
 @keyframes blob-move-1 { from { transform: translate(-20%, -20%) rotate(0deg); } to { transform: translate(100%, 80%) rotate(180deg); } }
 @keyframes blob-move-2 { from { transform: translate(80%, 100%) rotate(0deg); } to { transform: translate(-10%, -30%) rotate(360deg); } }
 
+/* Layer 2: Subtle Grid (di atas blobs) */
 #app {
   background-image:
     linear-gradient(rgba(var(--border-color-rgb), 0.07) 1px, transparent 1px),
@@ -61,12 +86,20 @@ body::after {
   background-size: 2rem 2rem;
   transition: background-image 0.5s ease;
 }
-body.grid-hidden #app { background-image: none; }
+/* Kelas utilitas untuk menyembunyikan grid */
+body.grid-hidden #app {
+  background-image: none;
+}
 
 /* -- Utility Classes -- */
 .tech-tag {
-  display: inline-block; background-color: var(--accent-color); color: white;
-  padding: 0.25rem 0.6rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500;
+  display: inline-block;
+  background-color: var(--accent-color);
+  color: white;
+  padding: 0.25rem 0.6rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
 }
 
 /* -- Animations -- */
@@ -77,28 +110,49 @@ body.grid-hidden #app { background-image: none; }
 .fade-enter-active, .fade-leave-active { transition: opacity 0.25s ease; }
 .fade-enter-from, .fade-leave-to { opacity: 0; }
 
-.boot-fade-leave-active { transition: opacity 0.5s ease-in-out; }
-.boot-fade-leave-to { opacity: 0; }
+.boot-fade-leave-active {
+  transition: opacity 0.5s ease-in-out;
+}
+.boot-fade-leave-to {
+  opacity: 0;
+}
 
 /* -- Shimmer Animation for Skeletons -- */
-@keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
 
 /* -- Scroll-based Animations -- */
 .scroll-animate {
-  opacity: 0; transform: translateY(30px);
+  opacity: 0;
+  transform: translateY(30px);
   transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
-.scroll-animate.is-visible { opacity: 1; transform: translateY(0); }
+.scroll-animate.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
 
 /* -- Themed Scrollbar -- */
-::-webkit-scrollbar { width: 10px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb {
-  background-color: rgba(var(--border-color-rgb), 0.5); border-radius: 10px;
-  border: 2px solid rgba(0,0,0,0); background-clip: padding-box;
+::-webkit-scrollbar {
+  width: 10px;
 }
-::-webkit-scrollbar-thumb:hover { background-color: rgba(156, 163, 175, 0.8); }
-:root.dark ::-webkit-scrollbar-thumb:hover { background-color: rgba(156, 163, 175, 0.8); }
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: rgba(var(--border-color-rgb), 0.5);
+  border-radius: 10px;
+  border: 2px solid rgba(0,0,0,0);
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(156, 163, 175, 0.8);
+}
+:root.dark ::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(156, 163, 175, 0.8);
+}
 
 /* -- Mouse Trail Particles -- */
 .mouse-trail {

@@ -1,0 +1,214 @@
+<!-- File: src/views/ModsView.vue -->
+<!-- (DIPERBARUI) Dirombak total dengan konsep "File Explorer" dan view toggle. -->
+<script setup>
+import { ref, computed } from 'vue';
+import ModCard from '../components/ui/ModCard.vue';
+import { mods } from '../data/mods.js';
+
+const categories = ['All', 'Game Mod', 'App Mod', 'Script'];
+const activeFilter = ref('All');
+const viewMode = ref('grid'); // 'grid' or 'list'
+
+const filteredMods = computed(() => {
+  if (activeFilter.value === 'All') {
+    return mods;
+  }
+  return mods.filter(mod => mod.category === activeFilter.value);
+});
+
+const formattedDate = (dateString) => {
+  if (!dateString) return '';
+  return new Date(dateString).toLocaleDateString('en-US', {
+    year: 'numeric', month: 'short', day: 'numeric'
+  });
+};
+</script>
+
+<template>
+  <div class="page-container fade-in-up">
+    <div class="explorer-window" v-animate-on-scroll>
+      <div class="window-header">
+        <div class="header-title">/home/jiya/mods</div>
+        <div class="view-toggle">
+          <button @click="viewMode = 'list'" :class="{ active: viewMode === 'list' }" aria-label="List View">
+            <v-icon name="fa-list" />
+          </button>
+          <button @click="viewMode = 'grid'" :class="{ active: viewMode === 'grid' }" aria-label="Grid View">
+            <v-icon name="fa-th-large" />
+          </button>
+        </div>
+      </div>
+
+      <div class="window-toolbar">
+        <div class="filter-tabs">
+          <button 
+            v-for="category in categories" 
+            :key="category"
+            :class="{ active: activeFilter === category }"
+            @click="activeFilter = category"
+          >
+            <span>{{ category }}</span>
+          </button>
+        </div>
+      </div>
+      
+      <div class="window-content">
+        <TransitionGroup v-if="viewMode === 'grid'" name="list" tag="div" class="mods-grid">
+          <ModCard 
+            v-for="(mod) in filteredMods" 
+            :key="mod.id"
+            :mod="mod"
+          />
+        </TransitionGroup>
+
+        <TransitionGroup v-if="viewMode === 'list'" name="list" tag="div" class="mods-list">
+          <!-- Header Daftar -->
+          <div class="list-header">
+            <span class="col-name">Name</span>
+            <span class="col-version">Version</span>
+            <span class="col-updated">Last Updated</span>
+          </div>
+          <!-- Item Daftar -->
+          <router-link
+            v-for="mod in filteredMods"
+            :key="mod.id"
+            :to="`/mods/${mod.slug}`"
+            class="list-item"
+          >
+            <div class="col-name">
+              <v-icon :name="mod.category === 'Game Mod' ? 'io-game-controller' : (mod.category === 'App Mod' ? 'fa-mobile-alt' : 'fa-code')" />
+              <span>{{ mod.title }}</span>
+            </div>
+            <span class="col-version">{{ mod.version }}</span>
+            <span class="col-updated">{{ formattedDate(mod.lastUpdated) }}</span>
+          </router-link>
+        </TransitionGroup>
+      </div>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+.explorer-window {
+  background: rgba(var(--card-bg-rgb), 0.4);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid rgba(var(--border-color-rgb), 0.1);
+  border-radius: 16px;
+  overflow: hidden;
+  margin: 2rem auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.window-header {
+  background-color: rgba(var(--card-bg-rgb), 0.3);
+  padding: 0.5rem 1.5rem;
+  border-bottom: 1px solid rgba(var(--border-color-rgb), 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.header-title {
+  color: var(--text-color-secondary);
+  font-family: 'Fira Code', monospace;
+  font-size: 0.8rem;
+}
+
+.view-toggle {
+  display: flex;
+  background: rgba(var(--border-color-rgb), 0.1);
+  border-radius: 6px;
+  padding: 2px;
+}
+.view-toggle button {
+  background: transparent;
+  border: none;
+  color: var(--text-color-secondary);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.view-toggle button.active {
+  background: rgba(var(--card-bg-rgb), 0.8);
+  color: var(--text-color-primary);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.window-toolbar {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid rgba(var(--border-color-rgb), 0.1);
+}
+.filter-tabs { /* ... (style tidak berubah) ... */ }
+
+.window-content {
+  padding: 1.5rem;
+  min-height: 500px;
+}
+
+.mods-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+/* List View */
+.mods-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.list-header {
+  display: grid;
+  grid-template-columns: 3fr 1fr 1fr;
+  gap: 1rem;
+  padding: 0 1rem;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.8rem;
+  color: var(--text-color-secondary);
+  border-bottom: 1px solid rgba(var(--border-color-rgb), 0.1);
+  padding-bottom: 0.75rem;
+}
+.list-item {
+  display: grid;
+  grid-template-columns: 3fr 1fr 1fr;
+  gap: 1rem;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--text-color-primary);
+  transition: background-color 0.2s;
+}
+.list-item:hover {
+  background-color: rgba(var(--border-color-rgb), 0.1);
+  color: var(--accent-color);
+}
+.col-name {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-weight: 500;
+}
+.col-version, .col-updated {
+  font-family: 'Fira Code', monospace;
+  color: var(--text-color-secondary);
+}
+.list-item:hover .col-version, .list-item:hover .col-updated {
+  color: inherit;
+}
+
+/* Transisi */
+.list-move, .list-enter-active, .list-leave-active {
+  transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
+}
+.list-enter-from, .list-leave-to {
+  opacity: 0;
+  transform: scale(0.95);
+}
+.list-leave-active {
+  position: absolute;
+}
+</style>
+
