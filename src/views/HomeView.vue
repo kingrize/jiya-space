@@ -1,142 +1,303 @@
 <!-- File: src/views/HomeView.vue -->
-<!-- (DIPERBARUI) Mengganti "File Explorer" dengan widget Dock interaktif. -->
+<!-- (DIPERBARUI) Menyembunyikan panel inspektur di seluler untuk pengalaman yang lebih bersih. -->
 <script setup>
-import { ref } from 'vue';
-import SystemInfo from '../components/ui/SystemInfo.vue';
-import SystemClock from '../components/ui/SystemClock.vue';
-import Dock from '../components/ui/Dock.vue'; // <-- Impor baru
+import { ref, onMounted, onUnmounted } from 'vue';
+import avatarUrl from '../assets/images/avatar.jpg';
 
-const contentSection = ref(null);
+const mantra = {
+  text: "The details are not the details. They make the design.",
+  author: "Charles Eames"
+};
 
-const scrollToContent = () => {
-  if (contentSection.value) {
-    contentSection.value.scrollIntoView({ behavior: 'smooth', block: 'start' });
+// --- Logika untuk Latar Belakang Partikel 2D ---
+const canvasContainer = ref(null);
+let ctx;
+let particlesArray;
+const mouse = { x: null, y: null, radius: 100 };
+
+class Particle {
+  constructor(x, y, directionX, directionY, size, color) {
+    this.x = x; this.y = y;
+    this.directionX = directionX; this.directionY = directionY;
+    this.size = size; this.color = color;
+  }
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+    ctx.fillStyle = this.color;
+    ctx.fill();
+  }
+  update() {
+    if (this.x > ctx.canvas.width || this.x < 0) this.directionX = -this.directionX;
+    if (this.y > ctx.canvas.height || this.y < 0) this.directionY = -this.directionY;
+    this.x += this.directionX;
+    this.y += this.directionY;
+    this.draw();
+  }
+}
+
+const init = () => {
+  if (!ctx) return;
+  particlesArray = [];
+  const numberOfParticles = (ctx.canvas.height * ctx.canvas.width) / 9000;
+  for (let i = 0; i < numberOfParticles; i++) {
+    const size = Math.random() * 2 + 1;
+    const x = Math.random() * (ctx.canvas.width - size * 2) + size;
+    const y = Math.random() * (ctx.canvas.height - size * 2) + size;
+    const directionX = (Math.random() * .4) - .2;
+    const directionY = (Math.random() * .4) - .2;
+    const color = getComputedStyle(document.documentElement).getPropertyValue('--accent-color') || 'rgba(0, 122, 255, 0.7)';
+    particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
   }
 };
+
+const connect = () => {
+  let opacityValue = 1;
+  const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent-color') || '#007AFF';
+  for (let a = 0; a < particlesArray.length; a++) {
+    for (let b = a; b < particlesArray.length; b++) {
+      const distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x)) +
+        ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
+      if (distance < (ctx.canvas.width/7) * (ctx.canvas.height/7)) {
+        opacityValue = 1 - (distance/20000);
+        ctx.strokeStyle = `${accentColor}${Math.floor(opacityValue * 255).toString(16).padStart(2, '0')}`;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+        ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+        ctx.stroke();
+      }
+    }
+  }
+};
+
+let animationFrameId;
+const animate = () => {
+  if (ctx) {
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    for (let i = 0; i < particlesArray.length; i++) {
+      particlesArray[i].update();
+    }
+    connect();
+  }
+  animationFrameId = requestAnimationFrame(animate);
+};
+
+onMounted(() => {
+  if (!canvasContainer.value) return;
+  const canvas = canvasContainer.value;
+  ctx = canvas.getContext('2d');
+  
+  const setCanvasSize = () => {
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+    init();
+  };
+  setCanvasSize();
+
+  animate();
+
+  const onMouseMove = (e) => {
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+  };
+  window.addEventListener('mousemove', onMouseMove);
+  window.addEventListener('resize', setCanvasSize);
+
+  onUnmounted(() => {
+    window.removeEventListener('mousemove', onMouseMove);
+    window.removeEventListener('resize', setCanvasSize);
+    cancelAnimationFrame(animationFrameId);
+  });
+});
 </script>
 
 <template>
-  <div class="home-view">
-    <!-- Hero Section -->
-    <section class="hero-section">
-      <h1 class="hero-title animated-gradient fade-in-up">JiyaOS</h1>
-      <p class="hero-subtitle fade-in-up" style="animation-delay: 0.2s;">
-        A personal desktop experience by a passionate front-end developer.
-      </p>
-      <button @click="scrollToContent" class="hero-cta fade-in-up" style="animation-delay: 0.4s;">
-        Explore Desktop
-      </button>
-    </section>
+  <div class="studio-layout">
+    <!-- Panel Kiri: Artboard -->
+    <div class="artboard-panel">
+      <canvas ref="canvasContainer" class="artboard-canvas"></canvas>
+      <div class="artboard-content fade-in-up">
+        <h1 class="hero-title">A space for creation and exploration.</h1>
+        <p class="hero-subtitle">Welcome to my digital studio. This is where I experiment, build, and share my passion for crafting beautiful and functional web experiences.</p>
+      </div>
+    </div>
 
-    <!-- Redesigned Bento Grid -->
-    <section ref="contentSection" class="bento-grid">
-      <!-- Item 1: System Info -->
-      <div class="bento-item system-info" v-animate-on-scroll>
-        <SystemInfo />
+    <!-- Panel Kanan: Inspector -->
+    <aside class="inspector-panel">
+      <!-- Kartu Profil -->
+      <div class="inspector-card" v-animate-on-scroll>
+        <div class="profile-header">
+          <img :src="avatarUrl" alt="Jiya Avatar" class="profile-avatar" />
+          <div class="profile-text">
+            <h3 class="profile-name">Jiya</h3>
+            <p class="profile-title">Front-End Developer</p>
+          </div>
+        </div>
       </div>
 
-      <!-- Item 2: System Clock -->
-      <div class="bento-item system-clock" v-animate-on-scroll style="--delay: 0.1s;">
-        <SystemClock />
+      <!-- Kartu Aksi Cepat -->
+      <div class="inspector-card" v-animate-on-scroll style="--delay: 0.1s;">
+        <h4 class="card-title">Quick Actions</h4>
+        <div class="action-list">
+          <router-link to="/mods" class="action-item"><v-icon name="io-game-controller" /><span>Mods</span></router-link>
+          <router-link to="/sky-clock" class="action-item"><v-icon name="fa-star" /><span>Sky Clock</span></router-link>
+          <router-link to="/about" class="action-item"><v-icon name="co-user" /><span>About</span></router-link>
+          <router-link to="/contact" class="action-item"><v-icon name="fa-envelope" /><span>Contact</span></router-link>
+        </div>
       </div>
 
-      <!-- Item 3: Interactive Dock -->
-      <div class="bento-item dock-widget" v-animate-on-scroll style="--delay: 0.2s;">
-        <Dock />
+      <!-- Kartu Prinsip Desain -->
+      <div class="inspector-card" v-animate-on-scroll style="--delay: 0.2s;">
+        <h4 class="card-title">Design Principle</h4>
+        <blockquote class="quote">
+          "{{ mantra.text }}"
+          <cite>- {{ mantra.author }}</cite>
+        </blockquote>
       </div>
-    </section>
+    </aside>
   </div>
 </template>
 
 <style scoped>
-/* Hero Section styles (tidak berubah) */
-.hero-section {
-  text-align: center;
-  padding: 6rem 1rem;
-  min-height: 90vh;
+.studio-layout {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  min-height: calc(100vh - 80px);
+}
+
+/* Panel Kiri: Artboard */
+.artboard-panel {
+  position: relative;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: 2rem;
+  overflow: hidden;
+}
+.artboard-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+.artboard-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
 }
 .hero-title {
-  font-size: 3.5rem;
-  font-weight: 800;
-  max-width: 800px;
-  line-height: 1.2;
-}
-.animated-gradient {
-  background: linear-gradient(90deg, var(--accent-color), var(--text-color-primary), var(--text-color-primary), var(--accent-color));
-  background-size: 300% 100%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: gradient-animation 10s ease infinite;
-}
-@keyframes gradient-animation {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--text-color-primary);
+  max-width: 500px;
+  margin: 0 auto;
 }
 .hero-subtitle {
   margin-top: 1.5rem;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   color: var(--text-color-secondary);
-  max-width: 600px;
+  max-width: 450px;
   margin-left: auto;
   margin-right: auto;
-}
-.hero-cta {
-  margin-top: 2.5rem;
-  background-color: var(--accent-color);
-  color: white;
-  border: none;
-  padding: 0.85rem 1.75rem;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-.hero-cta:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 15px rgba(0, 122, 255, 0.3);
+  line-height: 1.8;
 }
 
-/* Redesigned Bento Grid */
-.bento-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  /* Baris kedua dibuat lebih pendek untuk Dock */
-  grid-template-rows: minmax(220px, auto) 120px;
+/* Panel Kanan: Inspector */
+.inspector-panel {
+  background: rgba(var(--card-bg-rgb), 0.2);
+  border-left: 1px solid rgba(var(--border-color-rgb), 0.1);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
   gap: 1.5rem;
-  padding-top: 2rem;
 }
 
-.bento-item > * {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+/* Kartu di dalam Inspector */
+.inspector-card {
+  background: rgba(var(--card-bg-rgb), 0.4);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(var(--border-color-rgb), 0.1);
+  border-radius: 12px;
+  padding: 1.5rem;
 }
-.bento-item:hover > * {
-  transform: translateY(-8px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+.card-title {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-color-secondary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 1rem;
 }
 
-/* Item placements */
-.bento-item.system-info { grid-column: 1 / 3; grid-row: 1 / 2; }
-.bento-item.system-clock { grid-column: 3 / 4; grid-row: 1 / 2; }
-.bento-item.dock-widget { grid-column: 1 / 4; grid-row: 2 / 3; }
+/* Kartu Profil */
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.profile-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.profile-name {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+.profile-title {
+  color: var(--text-color-secondary);
+}
 
-/* Responsive adjustments */
+/* Kartu Aksi Cepat */
+.action-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+.action-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--text-color-primary);
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+.action-item:hover {
+  background-color: rgba(var(--border-color-rgb), 0.2);
+  color: var(--accent-color);
+}
+
+/* Kartu Kutipan */
+.quote {
+  font-style: italic;
+  line-height: 1.6;
+}
+.quote cite {
+  display: block;
+  margin-top: 0.75rem;
+  font-style: normal;
+  font-size: 0.9rem;
+  color: var(--text-color-secondary);
+}
+
+/* PERBAIKAN: Tata letak responsif */
 @media (max-width: 960px) {
-  .bento-grid {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto; /* Reset baris */
+  .studio-layout {
+    grid-template-columns: 1fr; /* Tumpuk menjadi satu kolom */
   }
-  .bento-item.system-info, .bento-item.system-clock, .bento-item.dock-widget {
-    grid-column: auto;
-    grid-row: auto;
+  .artboard-panel {
+    min-height: 70vh; /* Pastikan artboard tetap tinggi */
   }
-  .bento-item.dock-widget {
-    min-height: 120px;
+  .inspector-panel {
+    display: none; /* Sembunyikan panel inspektur di seluler */
   }
 }
 </style>

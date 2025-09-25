@@ -1,5 +1,5 @@
 // File: src/main.js
-// (LENGKAP) Versi penuh dengan semua ikon terdaftar.
+// (DIPERBARUI) Menambahkan ikon 'fa-envelope' untuk halaman kontak.
 
 import { createApp } from 'vue';
 import { createHead } from '@vueuse/head';
@@ -13,7 +13,8 @@ import {
   HiExternalLink, CoFolder, CoUser, CoHome, CoSearch,
   MdDownload, FaTag, FaAndroid, FaShieldAlt, FaCheckCircle,
   FaExclamationTriangle, FaTimes, FaHistory, IoGameController,
-  FaInfoCircle, FaTimesCircle, CoCog, FaStar, WiHot, FaUtensils, GiTurtle, FaWater, FaWind
+  FaInfoCircle, FaTimesCircle, CoCog, FaStar,
+  FaEnvelope // <-- Ikon baru ditambahkan di sini
 } from "oh-vue-icons/icons";
 
 addIcons(
@@ -21,9 +22,9 @@ addIcons(
   HiExternalLink, CoFolder, CoUser, CoHome, CoSearch,
   MdDownload, FaTag, FaAndroid, FaShieldAlt, FaCheckCircle,
   FaExclamationTriangle, FaTimes, FaHistory, IoGameController,
-  FaInfoCircle, FaTimesCircle, CoCog, FaStar,  WiHot, FaUtensils, GiTurtle, FaWater, FaWind
+  FaInfoCircle, FaTimesCircle, CoCog, FaStar,
+  FaEnvelope // <-- Ikon baru didaftarkan di sini
 );
-
 
 import './assets/main.css';
 

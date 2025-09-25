@@ -1,6 +1,8 @@
 <!-- File: src/components/layout/MobileNav.vue -->
-<!-- (DIPERBARUI) Menghapus subtitel Jepang dari menu seluler. -->
+<!-- (DIPERBARUI) Menambahkan profil header untuk nuansa aplikasi yang lebih premium. -->
 <script setup>
+import Avatar from '../ui/Avatar.vue';
+
 defineProps({
   isOpen: {
     type: Boolean,
@@ -19,14 +21,18 @@ const openSettings = () => {
 <template>
   <div class="mobile-nav-overlay" :class="{ 'is-open': isOpen }" @click="emit('close')"></div>
   <aside class="mobile-nav-panel" :class="{ 'is-open': isOpen }">
-    <div class="panel-header"><span class="panel-title">JiyaOS</span></div>
+    <div class="panel-header">
+      <div class="profile-info">
+        <Avatar />
+        <span class="name">Jiya</span>
+      </div>
+    </div>
     <nav class="main-nav">
       <ul>
-        <!-- PERUBAHAN: Tautan disederhanakan tanpa subtitel -->
         <li><router-link to="/" @click="emit('close')"><v-icon name="co-home" /> Home</router-link></li>
-        <li><router-link to="/projects" @click="emit('close')"><v-icon name="co-folder" /> Projects</router-link></li>
         <li><router-link to="/mods" @click="emit('close')"><v-icon name="io-game-controller" /> Mods</router-link></li>
         <li><router-link to="/sky-clock" @click="emit('close')"><v-icon name="fa-star" /> Sky Clock</router-link></li>
+        <li><router-link to="/contact" @click="emit('close')"><v-icon name="fa-envelope" /> Contact</router-link></li>
         <li><router-link to="/about" @click="emit('close')"><v-icon name="co-user" /> About</router-link></li>
       </ul>
     </nav>
@@ -56,12 +62,23 @@ const openSettings = () => {
   z-index: 99; display: flex; flex-direction: column;
 }
 .mobile-nav-panel.is-open { transform: translateX(0); }
+
+/* Header Panel Baru */
 .panel-header {
-  padding: 1rem 1.5rem; border-bottom: 1px solid rgba(var(--border-color-rgb), 0.1);
-  font-family: 'Fira Code', monospace;
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(var(--border-color-rgb), 0.1);
 }
-.panel-title { font-weight: 500; color: var(--text-color-secondary); }
-.main-nav { flex-grow: 1; padding: 2rem 1.5rem; }
+.profile-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.name {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.main-nav { flex-grow: 1; padding: 1.5rem; }
 ul { list-style: none; padding: 0; }
 li { margin-bottom: 0.5rem; }
 a {

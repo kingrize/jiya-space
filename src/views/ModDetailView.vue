@@ -1,5 +1,5 @@
 <!-- File: src/views/ModDetailView.vue -->
-<!-- (DIPERBARUI) Mendesain ulang total tombol accordion agar terlihat seperti tombol yang jelas. -->
+<!-- (DIPERBARUI) Dirombak total dengan desain "Inspector Panel" yang baru. -->
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
@@ -16,7 +16,8 @@ if (!mod.value) {
   router.replace('/404');
 }
 
-const isVersionHistoryOpen = ref(false);
+// State baru untuk mengontrol tab yang aktif
+const activeTab = ref('details'); // 'details', 'changelog', 'gallery'
 
 onMounted(() => {
   const isRisky = mod.value.category === 'Game Mod' || mod.value.category === 'Script';
@@ -85,11 +86,6 @@ onUnmounted(() => {
             </ul>
           </div>
           
-          <div v-if="mod.gallery && mod.gallery.length" class="section">
-            <h2 class="section-title">Gallery</h2>
-            <div class="gallery-grid"><img v-for="(img, index) in mod.gallery" :key="index" :src="img" :alt="`Gallery image ${index + 1}`" /></div>
-          </div>
-          
           <div class="section">
             <h2 class="section-title">Installation</h2>
             <pre class="instructions">{{ mod.instructions }}</pre>
@@ -107,47 +103,49 @@ onUnmounted(() => {
         <aside class="sidebar">
           <div class="info-box">
             <div class="window-header">/var/log/details</div>
-            <div class="info-content">
-              <div class="info-item">
-                <span class="label"><v-icon name="fa-tag" /> Version</span>
-                <span class="value">{{ mod.version }}</span>
-              </div>
-              <div v-if="mod.minAndroid" class="info-item">
-                <span class="label"><v-icon name="fa-android" /> Android</span>
-                <span class="value">{{ mod.minAndroid }}</span>
-              </div>
-              <div class="info-item">
-                <span class="label"><v-icon name="fa-shield-alt" /> Root</span>
-                <span class="value">{{ mod.requiresRoot ? 'Required' : 'Not Required' }}</span>
-              </div>
-              <div class="info-item">
-                <span class="label"><v-icon name="fa-history" /> Updated</span>
-                <span class="value">{{ formattedDate(mod.lastUpdated) }}</span>
-              </div>
-              <div class="info-item">
-                <span class="label"><v-icon name="md-download" /> Downloads</span>
-                <span class="value">{{ mod.downloads.toLocaleString() }}</span>
-              </div>
+            <div class="tab-navigation">
+              <button :class="{ active: activeTab === 'details' }" @click="activeTab = 'details'">Details</button>
+              <button v-if="mod.olderVersions && mod.olderVersions.length > 0" :class="{ active: activeTab === 'changelog' }" @click="activeTab = 'changelog'">Changelog</button>
+              <button v-if="mod.gallery && mod.gallery.length > 0" :class="{ active: activeTab === 'gallery' }" @click="activeTab = 'gallery'">Gallery</button>
             </div>
-            
-            <div v-if="mod.olderVersions && mod.olderVersions.length > 0" class="version-history-section">
-              <button class="version-history-toggle" @click="isVersionHistoryOpen = !isVersionHistoryOpen">
-                <h4>Older Versions</h4>
-                <v-icon name="fa-chevron-down" class="toggle-icon" :class="{ rotated: isVersionHistoryOpen }" />
-              </button>
-              <Transition name="slide-fade">
-                <div v-if="isVersionHistoryOpen" class="version-history-list">
+
+            <div class="tab-content">
+              <!-- Details Tab -->
+              <div v-if="activeTab === 'details'" class="tab-pane">
+                <div class="details-group">
+                  <h4 class="details-group-title">File Info</h4>
+                  <div class="info-item"><span class="label">Version</span><span class="value">{{ mod.version }}</span></div>
+                  <div class="info-item"><span class="label">Last Updated</span><span class="value">{{ formattedDate(mod.lastUpdated) }}</span></div>
+                   <div class="info-item"><span class="label">Downloads</span><span class="value">{{ mod.downloads.toLocaleString() }}</span></div>
+                </div>
+                <div class="details-group">
+                  <h4 class="details-group-title">Requirements</h4>
+                  <div v-if="mod.minAndroid" class="info-item"><span class="label">Android</span><span class="value">{{ mod.minAndroid }}</span></div>
+                  <div class="info-item"><span class="label">Root</span><span class="value">{{ mod.requiresRoot ? 'Required' : 'Not Required' }}</span></div>
+                </div>
+              </div>
+
+              <!-- Changelog Tab -->
+              <div v-if="activeTab === 'changelog'" class="tab-pane">
+                <div class="version-history-list">
                   <div class="version-item" v-for="version in mod.olderVersions" :key="version.version">
-                    <span class="version-number">v{{ version.version }}</span>
-                    <span class="version-date">{{ formattedDate(version.date) }}</span>
+                    <div class="version-info">
+                      <span class="version-number">v{{ version.version }}</span>
+                      <span class="version-date">{{ formattedDate(version.date) }}</span>
+                    </div>
                     <a :href="version.url" class="version-download" target="_blank" rel="noopener noreferrer" aria-label="Download this version">
                       <v-icon name="md-download" />
                     </a>
                   </div>
                 </div>
-              </Transition>
-            </div>
+              </div>
 
+              <!-- Gallery Tab -->
+              <div v-if="activeTab === 'gallery'" class="tab-pane gallery-pane">
+                <img v-for="(img, index) in mod.gallery" :key="index" :src="img" :alt="`Gallery image ${index + 1}`" />
+              </div>
+            </div>
+            
             <div class="info-footer">
               <button @click="startDownload" class="download-button" :disabled="isDownloading">
                 <span v-if="!isDownloading">Download Current (v{{ mod.version }})</span>
@@ -171,7 +169,7 @@ onUnmounted(() => {
 .game-tag { display: inline-block; background-color: var(--accent-color); color: white; padding: 0.25rem 0.6rem; border-radius: 9999px; font-size: 0.8rem; font-weight: 500; margin-top: 0.5rem; }
 .card-body {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 280px;
+  grid-template-columns: minmax(0, 1fr) 300px; /* Sidebar sedikit lebih lebar */
   grid-template-areas: "main sidebar";
   gap: 2rem;
   padding: 2rem;
@@ -184,12 +182,12 @@ onUnmounted(() => {
 .features-list { list-style: none; padding: 0; }
 .features-list li { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; color: var(--text-color-secondary); }
 .features-list .v-icon { color: var(--accent-color); }
-.gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
-.gallery-grid img { width: 100%; border-radius: 8px; }
 .instructions { background: rgba(var(--border-color-rgb), 0.1); padding: 1rem; border-radius: 8px; white-space: pre-wrap; font-family: 'Fira Code', monospace; line-height: 1.8; }
 .discussion-placeholder { background: rgba(var(--border-color-rgb), 0.1); padding: 2rem; border-radius: 12px; text-align: center; border: 1px dashed rgba(var(--border-color-rgb), 0.3); }
 .discussion-placeholder p { font-weight: 500; margin-bottom: 0.5rem; }
 .discussion-placeholder span { font-size: 0.9rem; color: var(--text-color-secondary); }
+
+/* PERUBAHAN: Didesain ulang total */
 .info-box {
   background: rgba(var(--card-bg-rgb), 0.2);
   border: 1px solid rgba(var(--border-color-rgb), 0.1);
@@ -197,6 +195,8 @@ onUnmounted(() => {
   position: sticky;
   top: 100px;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 .window-header {
   background-color: rgba(var(--card-bg-rgb), 0.3);
@@ -206,100 +206,65 @@ onUnmounted(() => {
   font-family: 'Fira Code', monospace;
   font-size: 0.8rem;
   text-align: center;
+  flex-shrink: 0;
 }
-.info-content { padding: 1.5rem; }
-.info-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; font-size: 0.9rem; }
-.info-item .label { display: flex; align-items: center; gap: 0.5rem; color: var(--text-color-secondary); }
-.info-item .value { font-weight: 500; color: var(--text-color-primary); }
-.info-footer { padding: 1rem; border-top: 1px solid rgba(var(--border-color-rgb), 0.1); }
+.tab-navigation {
+  display: flex;
+  padding: 0.5rem;
+  border-bottom: 1px solid rgba(var(--border-color-rgb), 0.1);
+  background-color: rgba(var(--card-bg-rgb), 0.2);
+}
+.tab-navigation button {
+  flex: 1;
+  background: none;
+  border: none;
+  color: var(--text-color-secondary);
+  padding: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.tab-navigation button.active {
+  background: rgba(var(--card-bg-rgb), 0.5);
+  color: var(--text-color-primary);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+.tab-content {
+  padding: 1.5rem;
+  flex-grow: 1;
+}
+.details-group { margin-bottom: 1.5rem; }
+.details-group:last-child { margin-bottom: 0; }
+.details-group-title { font-size: 0.8rem; font-weight: 500; color: var(--text-color-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.75rem; }
+.info-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; font-size: 0.9rem; }
+.info-item .label { color: var(--text-color-secondary); }
+.info-item .value { font-weight: 500; color: var(--text-color-primary); font-family: 'Fira Code', monospace; }
+
+.version-history-list { display: flex; flex-direction: column; gap: 0.5rem; }
+.version-item {
+  display: grid; grid-template-columns: 1fr auto; gap: 1rem;
+  align-items: center; background: rgba(var(--border-color-rgb), 0.1); padding: 0.5rem 0.75rem; border-radius: 6px; font-size: 0.9rem;
+}
+.version-info { display: flex; flex-direction: column; line-height: 1.3; }
+.version-number { font-family: 'Fira Code', monospace; font-weight: 500; }
+.version-date { font-size: 0.8rem; color: var(--text-color-secondary); }
+.version-download { color: var(--text-color-secondary); transition: color 0.2s; }
+.version-download:hover { color: var(--accent-color); }
+
+.gallery-pane { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+.gallery-pane img { width: 100%; border-radius: 8px; }
+
+.info-footer {
+  margin-top: auto; /* Mendorong ke bawah */
+  padding: 1rem;
+  border-top: 1px solid rgba(var(--border-color-rgb), 0.1);
+  background-color: rgba(var(--card-bg-rgb), 0.2);
+}
 .download-button { display: flex; justify-content: center; align-items: center; gap: 0.5rem; width: 100%; background-color: var(--accent-color); color: white; border: none; padding: 0.75rem 1rem; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; text-decoration: none; transition: all 0.2s; }
 .download-button:hover:not(:disabled) { transform: scale(1.05); }
 .download-button:disabled { background-color: var(--text-color-secondary); cursor: not-allowed; }
-
-/* PERUBAHAN: Didesain ulang agar terlihat seperti tombol yang jelas */
-.version-history-section {
-  border-top: 1px solid rgba(var(--border-color-rgb), 0.1);
-  padding: 1rem;
-}
-.version-history-toggle {
-  background-color: rgba(var(--border-color-rgb), 0.1);
-  border: 1px solid rgba(var(--border-color-rgb), 0.2);
-  color: var(--text-color-primary);
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
-  padding: 0.75rem 1rem;
-  border-radius: 8px;
-  font-family: inherit;
-  font-size: 1rem;
-  transition: background-color 0.2s, border-color 0.2s;
-}
-.version-history-toggle:hover {
-  background-color: rgba(var(--border-color-rgb), 0.2);
-  border-color: rgba(var(--border-color-rgb), 0.3);
-}
-.version-history-toggle h4 {
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: var(--text-color-secondary);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-.toggle-icon {
-  transition: transform 0.3s ease;
-  color: var(--text-color-secondary);
-}
-.toggle-icon.rotated {
-  transform: rotate(180deg);
-}
-
-.version-history-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  overflow: hidden;
-  padding: 1rem 0 0; /* Padding di atas saat terbuka */
-}
-.version-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: rgba(var(--border-color-rgb), 0.05);
-  padding: 0.5rem 0.75rem;
-  border-radius: 6px;
-  font-size: 0.9rem;
-}
-.version-number {
-  font-family: 'Fira Code', monospace;
-  font-weight: 500;
-}
-.version-date {
-  font-size: 0.8rem;
-  color: var(--text-color-secondary);
-}
-.version-download {
-  color: var(--text-color-secondary);
-  transition: color 0.2s;
-}
-.version-download:hover {
-  color: var(--accent-color);
-}
-
-/* Transisi untuk accordion */
-.slide-fade-enter-active {
-  transition: all 0.3s ease-out;
-}
-.slide-fade-leave-active {
-  transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
-}
-.slide-fade-enter-from,
-.slide-fade-leave-to {
-  transform: translateY(-10px);
-  opacity: 0;
-}
-
 
 @media (max-width: 960px) {
   .card-body {

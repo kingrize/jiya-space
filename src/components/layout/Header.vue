@@ -1,5 +1,5 @@
 <!-- File: src/components/layout/Header.vue -->
-<!-- (DIPERBARUI) Memperbaiki bug terpotong dengan menghapus 'overflow: hidden'. -->
+<!-- (DIPERBARUI) Dirombak total dengan desain "Application Menubar" yang baru. -->
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
 import Avatar from '../ui/Avatar.vue';
@@ -11,10 +11,7 @@ const emit = defineEmits(['open-settings']);
 const isMobileMenuOpen = ref(false);
 const scrolled = ref(false);
 
-const handleScroll = () => {
-  scrolled.value = window.scrollY > 10;
-};
-
+const handleScroll = () => { scrolled.value = window.scrollY > 10; };
 const song = ref(null);
 const status = ref('Loading status...');
 let intervalId = null;
@@ -51,29 +48,34 @@ onUnmounted(() => {
 <template>
   <header class="header-container" :class="{ scrolled: scrolled }">
     <div class="header-content">
-      <div class="profile-section">
-        <Avatar />
-        <div class="status-container">
+      <router-link to="/" class="logo-section">
+        <v-icon name="co-command" />
+        <span>JiyaOS</span>
+      </router-link>
+
+      <nav class="desktop-nav">
+        <router-link to="/">Home</router-link>
+        <router-link to="/mods">Mods</router-link>
+        <router-link to="/sky-clock">Sky Clock</router-link>
+        <router-link to="/about">About</router-link>
+        <router-link to="/contact">Contact</router-link>
+      </nav>
+
+      <div class="controls-section">
+        <SettingsButton @open="emit('open-settings')" />
+        <div class="profile-info">
           <span class="name">Jiya</span>
           <div class="status">
             <template v-if="song && song.isPlaying">
-              <span>🎵 {{ song.title }} - {{ song.artist }}</span>
+              <span>🎵 Now Playing...</span>
             </template>
             <template v-else>
               <span>{{ status }}</span>
             </template>
           </div>
         </div>
+        <Avatar />
       </div>
-
-      <nav class="desktop-nav">
-        <router-link to="/">Home</router-link>
-        <router-link to="/projects">Projects</router-link>
-        <router-link to="/mods">Mods</router-link>
-        <router-link to="/sky-clock">Sky Clock</router-link>
-        <router-link to="/about">About</router-link>
-        <SettingsButton @open="emit('open-settings')" />
-      </nav>
 
       <div class="mobile-nav-toggle">
         <HamburgerButton :active="isMobileMenuOpen" @toggle="isMobileMenuOpen = !isMobileMenuOpen" />
@@ -88,47 +90,94 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-/* Style tidak berubah, gunakan yang sudah ada */
 .header-container {
-  padding: 1rem 2rem; position: sticky; top: 0; z-index: 50;
-  transition: background-color 0.3s, border-bottom-color 0.3s;
-}
-.header-container.scrolled {
-  background-color: var(--header-bg); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  padding: 0.75rem 2rem; /* Padding disesuaikan */
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background-color: var(--header-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(var(--border-color-rgb), 0.1);
 }
 .header-content {
-  max-width: 960px; margin: 0 auto; display: flex;
-  justify-content: space-between; align-items: center;
+  max-width: 1200px; /* Lebar maksimal diperbesar */
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 56px;
 }
-.profile-section { 
-  display: flex; 
-  align-items: center; 
-  gap: 0.75rem; 
-  /* PERBAIKAN: overflow: hidden dihapus dari sini */
+
+.logo-section {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 600;
+  font-size: 1.1rem;
+  text-decoration: none;
+  color: var(--text-color-primary);
 }
-.status-container { 
-  display: flex; 
-  flex-direction: column; 
-  /* PERBAIKAN: overflow: hidden juga dihapus dari sini untuk keamanan */
+
+.desktop-nav {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
 }
-.name { font-weight: 600; font-size: 1.1rem; }
-.status {
-  font-size: 0.85rem; color: var(--text-color-secondary); white-space: nowrap;
-  overflow: hidden; text-overflow: ellipsis;
-}
-.desktop-nav { display: flex; align-items: center; gap: 2rem; }
 .desktop-nav a {
-  text-decoration: none; color: var(--text-color-secondary); font-weight: 500;
-  transition: color 0.2s; position: relative; text-align: center;
+  text-decoration: none;
+  color: var(--text-color-secondary);
+  font-weight: 500;
+  transition: color 0.2s;
+  position: relative;
 }
-.desktop-nav a:hover, .desktop-nav a.router-link-exact-active { color: var(--text-color-primary); }
+.desktop-nav a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--accent-color);
+  transform: scaleX(0);
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.desktop-nav a:hover, .desktop-nav a.router-link-exact-active {
+  color: var(--text-color-primary);
+}
+.desktop-nav a.router-link-exact-active::after {
+  transform: scaleX(1);
+}
+
+.controls-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.profile-info {
+  text-align: right;
+}
+.name {
+  font-weight: 600;
+  font-size: 1rem;
+}
+.status {
+  font-size: 0.8rem;
+  color: var(--text-color-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px;
+}
 
 .mobile-nav-toggle { display: none; }
-@media (max-width: 768px) {
-  .desktop-nav { display: none; }
-  .mobile-nav-toggle { display: block; }
-  .header-container { padding: 1rem; }
+@media (max-width: 960px) {
+  .desktop-nav, .controls-section {
+    display: none;
+  }
+  .mobile-nav-toggle {
+    display: block;
+  }
 }
 </style>
 

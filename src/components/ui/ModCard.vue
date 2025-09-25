@@ -1,5 +1,5 @@
 <!-- File: src/components/ui/ModCard.vue -->
-<!-- (DIPERBARUI) Didesain ulang untuk menyertakan ringkasan deskripsi yang selalu terlihat. -->
+<!-- (DIPERBARUI) Dirombak total dengan desain "jendela aplikasi" yang lebih informatif. -->
 <script setup>
 defineProps({
   mod: Object,
